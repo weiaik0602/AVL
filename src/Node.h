@@ -5,9 +5,9 @@
 
 typedef struct Node Node;
 struct Node {
-  Node *Left;
-  Node *Right;
+  Node *left;
+  Node *right;
   int balancefactor;
-  int Data;
+  int data;
 };
 #endif // _NODE_H
