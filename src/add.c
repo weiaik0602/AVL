@@ -1,18 +1,20 @@
 #include "add.h"
 
 Node* addNode(Node *addition,Node *node){
-  if((node->left!=NULL)&&(addition->data)>(node->data)){
+  if((addition->data)<(node->data)){
+    if(node->left!=NULL)
     addNode(addition,node->left);
-    //node->left=addition;
+    else
+    node->left=addition;
   }
-  if(node->left==NULL)
-  node->left=addition;
 
-  if((node->right!=NULL)&&(addition->data)<(node->data)){
+
+  if((addition->data)>(node->data)){
+    if(node->right!=NULL)
     addNode(addition,node->right);
-    // /node->right=addition;
+    else
+    node->right=addition;
   }
-  if(node->right==NULL)
-  node->right=addition;
+
 
 }
