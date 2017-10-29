@@ -23,3 +23,16 @@ Node* rotateLeft(Node *node){
   temp->left=node;
   return temp;
 }
+
+Node *rotateLeftRight(Node *node){
+  Node *root;
+  node->left = rotateLeft(node->left);
+  root = rotateRight(node);
+  return root;
+}
+Node *rotateRightLeft(Node *node){
+  Node *root;
+  node->right = rotateRight(node->right);
+  root = rotateLeft(node);
+  return root;
+}
