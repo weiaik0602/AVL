@@ -4,5 +4,6 @@
 #include <Node.h>
 #include <stdio.h>
 
-Node* addNode(Node *addition,Node *node);
+Node* addNode_SIM(Node *addition,Node *node);
+Node* addNode(Node **rootPtr,Node *nodeToAdd);
 #endif // _ADD_H

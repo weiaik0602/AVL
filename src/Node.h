@@ -7,7 +7,7 @@ typedef struct Node Node;
 struct Node {
   Node *left;
   Node *right;
-  int balancefactor;
+  int bf;
   int data;
 };
 #endif // _NODE_H
