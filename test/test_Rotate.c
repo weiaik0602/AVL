@@ -1,6 +1,5 @@
 #include "unity.h"
 #include "Rotate.h"
-#include "add.h"
 #include "AVL_Balance.h"
 #include <stdio.h>
 
@@ -138,28 +137,6 @@ void test_rotate_rightleft(void)
     TEST_ASSERT_EQUAL_PTR(&node5,node25.left);
     TEST_ASSERT_EQUAL_PTR(&node35,node40.left);
     TEST_ASSERT_EQUAL_PTR(NULL,node40.right);
-}
-
-void xtest_add(void){
-      Node *root;
-      //Node node70;
-      initNode(&node20,NULL,NULL,0);
-      initNode(&node30,NULL,NULL,0);
-      initNode(&node25,NULL,NULL,0);
-      initNode(&node70,NULL,NULL,0);
-      initNode(&node40,&node25,NULL,-2);
-      printf("%d\n",&node25);
-      printf("%d\n",&node70);
-      printf("%d\n",node40.right);
-      root=addNode(&node70,&node40);
-      printf("%d\n",node40.right);
-      printf("%d\n",node40.left);
-      TEST_ASSERT_EQUAL_PTR(&node70,node40.right);
-      TEST_ASSERT_EQUAL_PTR(&node25,node40.left);
-      root=addNode(&node20,&node40);
-      TEST_ASSERT_EQUAL_PTR(&node20,node25.left);
-      root=addNode(&node30,&node40);
-      TEST_ASSERT_EQUAL_PTR(&node30,node25.right);
 }
 
 /*
