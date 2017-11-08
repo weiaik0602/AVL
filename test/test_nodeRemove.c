@@ -42,5 +42,38 @@ void test_remove(void){
   initNode(&node50,&node40,NULL,-2);
 
   root=nodeRemove(&root2,40);
-  TEST_ASSERT_EQUAL_PTR(root,&node30);
+  TEST_ASSERT_EQUAL_PTR(root,&node50);
+  TEST_ASSERT_EQUAL_NODE(&node30,NULL,-2,&node50);
+  TEST_ASSERT_EQUAL_NODE(NULL,NULL,-0,&node30);
+
+}
+void test_remove1(void){
+  Node *root;
+  Node *root2=&node50;
+  initNode(&node30,NULL,NULL,0);
+  initNode(&node40,&node30,NULL,-1);
+  initNode(&node50,&node40,NULL,-2);
+
+  root=nodeRemove(&root2,30);
+  TEST_ASSERT_EQUAL_PTR(root,&node50);
+  TEST_ASSERT_EQUAL_NODE(&node40,NULL,-2,&node50);
+
+}
+void test_remove_50(void){
+  Node *root;
+  Node *root2=&node50;
+  initNode(&node10,NULL,NULL,0);
+  initNode(&node25,&node10,NULL,0);
+  initNode(&node45,NULL,NULL,0);
+  initNode(&node40,&node25,&node45,0);
+  initNode(&node55,NULL,NULL,0);
+  initNode(&node70,NULL,NULL,0);
+  initNode(&node60,&node55,&node70,0);
+  initNode(&node50,&node40,&node60,0);
+
+  root=nodeRemove(&root2,50);
+  TEST_ASSERT_EQUAL_PTR(root,&node55);
+  TEST_ASSERT_EQUAL_NODE(&node40,&node60,0,&node55);
+  TEST_ASSERT_EQUAL_NODE(&node25,&node45,0,&node40);
+  TEST_ASSERT_EQUAL_NODE(&node55,&node70,0,&node60);
 }
