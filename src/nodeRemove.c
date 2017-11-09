@@ -1,16 +1,30 @@
 #include "nodeRemove.h"
 
 Node *findNearest(Node *rootPtr,int choose){
-  
+  Node *child;
   if(choose==LEFT){
-    if(rootPtr->left!=NULL)
-      findNearest(rootPtr->left,choose);
+    child=rootPtr->left;
+    if(child!=NULL){
+      if(child->left!=NULL)
+        findNearest(rootPtr->left,choose);
+      else{
+        //rootPtr->left=NULL;
+        return child;
+        }
+      }
     else
       return rootPtr;
   }
-  else if(choose==RIGHT){
-    if(rootPtr->right!=NULL)
-      findNearest(rootPtr->right,choose);
+  if(choose==RIGHT){
+    child=rootPtr->right;
+    if(child!=NULL){
+      if(child->right!=NULL)
+        findNearest(rootPtr->right,choose);
+      else{
+        //rootPtr->right=NULL;
+        return child;
+        }
+      }
     else
       return rootPtr;
   }
@@ -27,12 +41,10 @@ Node *nodeRemove(Node **rootPtr, int valToRemove){
     if(Remove->right!=NULL){
       Nearest=findNearest(Remove->right,LEFT);
       node=Nearest;
-    //  nodeRemove(node->right, node->data);
     }
     else if(Remove->left!=NULL){
       Nearest=findNearest(Remove->left,RIGHT);
       node=Nearest;
-    //  nodeRemove(node->left, node->data);
     }
     else
       node= NULL;
@@ -42,21 +54,27 @@ Node *nodeRemove(Node **rootPtr, int valToRemove){
   else if(node->left!=NULL){
     if(leftChild->data==valToRemove){
       Remove=node->left;
+      //printf("%d\n",Remove->right->data );
       if(Remove->right!=NULL){
         Nearest=findNearest(Remove->right,LEFT);
+        nodeRemove(&(Remove->right),Nearest->data);
         node->left=Nearest;
+        if(Remove->right!=Nearest){
+          Nearest->left=Remove->left;
+          Nearest->right=Remove->right;
+        }
       }
       else if(Remove->left!=NULL){
         Nearest=findNearest(Remove->left,RIGHT);
         node->left=Nearest;
+        if(Remove->left!=Nearest){
+          Nearest->left=Remove->left;
+          Nearest->right=Remove->right;
+        }
       }
       else
         node->left=NULL;
 
-      if(Remove->left!=Nearest){
-        Nearest->left=Remove->left;
-        Nearest->right=Remove->right;
-      }
     }
   }
   else if(node->right!=NULL){
@@ -69,7 +87,7 @@ Node *nodeRemove(Node **rootPtr, int valToRemove){
       else
         node->right=NULL;
 
-      if(Remove->left!=Nearest){
+      if(Remove->right!=Nearest&&Remove->left!=Nearest){
         Nearest->left=Remove->left;
         Nearest->right=Remove->right;
       }
@@ -81,5 +99,5 @@ Node *nodeRemove(Node **rootPtr, int valToRemove){
   else if(valToRemove > (*rootPtr)->data){
     nodeRemove(&(*rootPtr)->right,valToRemove);
   }
-return node;
+  return node;
 }
