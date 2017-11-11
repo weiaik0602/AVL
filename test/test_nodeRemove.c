@@ -82,9 +82,20 @@ void test_remove_40(void){
 
 
   root=nodeRemove(&root2,40);
+  printf("%d\n",&node45.left );
+  printf("%d\n",&node45);
+  printf("%d\n",&node40);
+  printf("%d\n",&node25);
+  printf("%d\n",&node10);
+  printf("%d\n",&node50);
+  printf("%d\n",&node60);
+  printf("%d\n",&node70);
+  printf("%d\n",&node55);
   TEST_ASSERT_EQUAL_PTR(root,&node50);
   TEST_ASSERT_EQUAL_NODE(&node45,&node60,0,&node50);
-  TEST_ASSERT_EQUAL_NODE(&node25,NULL,0,&node45);
+  TEST_ASSERT_EQUAL_PTR(&node25,&node45.left);
+  TEST_ASSERT_EQUAL_PTR(&node45,node45.right);
+  //TEST_ASSERT_EQUAL_NODE(&node25,&node45,0,&node45);
   TEST_ASSERT_EQUAL_NODE(&node55,&node70,0,&node60);
 }
 
