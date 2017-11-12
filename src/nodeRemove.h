@@ -13,5 +13,7 @@
 
 
 Node *findNearest(Node *rootPtr,int choose);
+Node *removeRoot(Node *Remove);
 Node *nodeRemove(Node **rootPtr, int valToRemove);
+
 #endif // _NODEREMOVE_H
