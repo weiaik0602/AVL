@@ -9,5 +9,6 @@ struct Node {
   Node *right;
   int bf;
   int data;
+  int lock;
 };
 #endif // _NODE_H

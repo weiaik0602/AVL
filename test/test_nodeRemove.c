@@ -17,209 +17,528 @@ void tearDown(void)
 {
 }
 
-void xtest_findNearest(void)
-{
-  Node *root;
-  Node *root2;
-  initNode(&node30,NULL,NULL,0);
-  initNode(&node40,&node30,NULL,-1);
-  initNode(&node50,&node40,NULL,0);
-  root=findNearest(&node50,LEFT);
-  TEST_ASSERT_EQUAL_PTR(root,&node30);
 
-  initNode(&node30,NULL,&node40,0);
-  initNode(&node40,NULL,&node50,-1);
-  initNode(&node50,NULL,NULL,0);
-  root=findNearest(&node30,RIGHT);
-  TEST_ASSERT_EQUAL_PTR(root,&node50);
+/**
+---------------------------------------------------------------------
+
+-----------------remove 40----------------------
+*                   remove 40
+*        40 (0) ------------------>  NULL
+*
+**/
+void test_nodeRemove_given_40_remove_expect_NULL(void){
+    initNode(&node40,NULL,NULL,0);
+
+    Node *root = &node40;
+    root=nodeRemove(&root,40);
+    TEST_ASSERT_EQUAL_PTR(NULL,root);
+}
+/**
+---------------------------------remove 30------------------------------
+*       40(-1)                        40 (0)
+*       /          remove 40
+*     30 (0)  --------------->
+*
+**/
+void test_nodeRemove_given_40_with_child_30_delete_30_expect_40_only(void){
+
+    initNode(&node30,NULL,NULL,0);
+    initNode(&node40,&node30,NULL,-1);
+
+    Node *root = &node40;
+    nodeRemove(&root,30);
+    TEST_ASSERT_EQUAL_PTR(&node40,root);
+    TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node40);
+}
+/**
+---------------------------------remove 50------------------------------
+*       40(0)                              40 (-1)
+*       / \          remove 50            /
+*   30 (0) 50(0)   --------------->     30
+*
+**/
+void test_nodeRemove_given_40_with_child_30_50__delete_50_expect_40_30(void){
+
+    initNode(&node50,NULL,NULL,0);
+    initNode(&node30,NULL,NULL,0);
+    initNode(&node40,&node30,&node50,0);
+
+    Node *root = &node40;
+    nodeRemove(&root,50);
+    TEST_ASSERT_EQUAL_PTR(&node40,root);
+    TEST_ASSERT_EQUAL_NODE(&node30,NULL,-1,&node40);
 }
 
-void xtest_remove(void){
-  Node *root;
-  Node *root2=&node50;
-  initNode(&node30,NULL,NULL,0);
-  initNode(&node40,&node30,NULL,-1);
-  initNode(&node50,&node40,NULL,-2);
+/**
+---------------------------------remove 50------------------------------
+*       40(-1)                            40 (-2)                                  30 (0)
+*       / \          remove 50          /                 rotate right           /  \
+*   30 (-1) 50(0)   --------------->   30(-1)            ------------>         20    40 (0)
+*   /                                 /
+*  20                               20
+*
+**/
+void test_nodeRemove_after_remove_rotate_right(void){
 
-  root=nodeRemove(&root2,40);
-  TEST_ASSERT_EQUAL_PTR(root,&node50);
-  TEST_ASSERT_EQUAL_NODE(&node30,NULL,-2,&node50);
-  TEST_ASSERT_EQUAL_NODE(NULL,NULL,-0,&node30);
+    initNode(&node50,NULL,NULL,0);
+    initNode(&node20,NULL,NULL,0);
+    initNode(&node30,&node20,NULL,-1);
+    initNode(&node40,&node30,&node50,-1);
+
+    Node *root = &node40;
+    root=nodeRemove(&root,50);
+    TEST_ASSERT_EQUAL_PTR(&node30,root);
+    TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node40);
+    TEST_ASSERT_EQUAL_NODE(&node20,&node40,0,&node30);
+}
+/**
+---------------------------------remove 50------------------------------
+*       40(-1)                            40 (-2)                                  30 (1)
+*       / \          remove 50          /                 rotate right           /  \
+*   30 (0) 50(0)   --------------->   30(0)            ------------>          20     40 (-1)
+*   / \                               / \                                            /
+*  20  35                           20  35                                          35
+*
+**/
+void test_nodeRemove_after_remove_rotate_right_condition2(void){
+
+    initNode(&node50,NULL,NULL,0);
+    initNode(&node35,NULL,NULL,0);
+    initNode(&node20,NULL,NULL,0);
+    initNode(&node30,&node20,&node35,0);
+    initNode(&node40,&node30,&node50,-1);
+
+    Node *root = &node40;
+    root=nodeRemove(&root,50);
+    TEST_ASSERT_EQUAL_PTR(&node30,root);
+    TEST_ASSERT_EQUAL_NODE(&node35,NULL,-1,&node40);
+    TEST_ASSERT_EQUAL_NODE(&node20,&node40,1,&node30);
+}
+/**
+---------------------------------remove 100       &           rotateLeftRight--------------------------------
+*           90(-1)                            90 (-2)                                        60 (0)
+*          / \          remove 100            /  \               rotateleftright           /  \
+*       50 (1) 95(1)   --------------->   50(1)   95[0]         ---------------->   (-1) 50  90 (0)
+*      / \     \                            / \                                          /    / \
+*  45   60 (1)   100(0)                    45  60 (1)                                   45   70   95
+*        \                                       \
+*        70                                       70
+*
+**/
+void test_remove_given_a_avltree_need_rotateLeftRight_after_remove_condition1_expect_balance(void){
+
+     initNode(&node45,NULL,NULL,0);
+     initNode(&node70,NULL,NULL,0);
+     initNode(&node100,NULL,NULL,0);
+     initNode(&node90,&node50,&node95,-1);
+     initNode(&node95,NULL,&node100,1);
+     initNode(&node50,&node45,&node60,1);
+     initNode(&node60,NULL,&node70,1);
+
+     Node *root = &node90;
+     root=nodeRemove(&root,100);
+     TEST_ASSERT_EQUAL_PTR(&node60,root);
+     TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node45);
+     TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node70);
+     TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node95);
+     TEST_ASSERT_EQUAL_NODE(&node50,&node90,0,&node60);
+     TEST_ASSERT_EQUAL_NODE(&node45,NULL,-1,&node50);
+     TEST_ASSERT_EQUAL_NODE(&node70,&node95,0,&node90);
+}
+/**
+---------------------------------remove 100       &           rotateLeftRight--------------------------------
+*           90(-1)                            90 (-2)                                        60 (0)
+*          / \          remove 100            /  \               rotateleftright           /  \
+*       50 (1) 95(1)   --------------->   50(1)   95[0]         ---------------->   (0)   50   90 (1)
+*      / \     \                            / \                                          / \     \
+*  45   60 (-1) 100(0)                    45  60 (-1)                                   45  55    95
+*        /                                     /
+*       55                                    55
+*
+**/
+void test_remove_given_a_avltree_need_rotateLeftRight_after_remove_condition2_expect_balance(void){
+
+     initNode(&node45,NULL,NULL,0);
+     initNode(&node55,NULL,NULL,0);
+     initNode(&node100,NULL,NULL,0);
+     initNode(&node95,NULL,&node100,1);
+     initNode(&node90,&node50,&node95,-1);
+     initNode(&node50,&node45,&node60,1);
+     initNode(&node60,&node55,NULL,-1);
+
+     Node *root = &node90;
+     root=nodeRemove(&root,100);
+     TEST_ASSERT_EQUAL_PTR(&node60,root);
+     TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node45);
+     TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node55);
+     TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node95);
+     TEST_ASSERT_EQUAL_NODE(&node50,&node90,0,&node60);
+     TEST_ASSERT_EQUAL_NODE(&node45,&node55,0,&node50);
+     TEST_ASSERT_EQUAL_NODE(NULL,&node95,1,&node90);
 
 }
-void xtest_remove1(void){
-  Node *root;
-  Node *root2=&node50;
-  initNode(&node30,NULL,NULL,0);
-  initNode(&node40,&node30,NULL,-1);
-  initNode(&node50,&node40,NULL,-2);
+/**
+---------------------------------remove 100       &           rotateLeftRight--------------------------------
+*           90(-1)                            90 (-2)                                        60 (0)
+*          / \          remove 100            /  \               rotateleftright           /  \
+*       50 (1) 95(1)   --------------->   50(1)   95[0]         ---------------->   (0)   50   90 (0)
+*      / \     \                            / \                                          / \   / \
+*  45   60 (0) 100(0)                    45  60 (-1)                                   45  55 70 95
+*        / \                                 /  \
+*       55  70                              55  70
+*
+**/
+void test_remove_given_a_avltree_need_rotateLeftRight_after_remove_condition3_expect_balance(void){
 
-  root=nodeRemove(&root2,30);
-  TEST_ASSERT_EQUAL_PTR(root,&node50);
-  TEST_ASSERT_EQUAL_NODE(&node40,NULL,-2,&node50);
+     initNode(&node45,NULL,NULL,0);
+     initNode(&node55,NULL,NULL,0);
+     initNode(&node100,NULL,NULL,0);
+     initNode(&node70,NULL,NULL,0);
+     initNode(&node95,NULL,&node100,1);
+     initNode(&node90,&node50,&node95,-1);
+     initNode(&node50,&node45,&node60,1);
+     initNode(&node60,&node55,&node70,0);
+
+     Node *root = &node90;
+     root=nodeRemove(&root,100);
+     TEST_ASSERT_EQUAL_PTR(&node60,root);
+     TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node45);
+     TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node55);
+     TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node95);
+     TEST_ASSERT_EQUAL_NODE(&node50,&node90,0,&node60);
+     TEST_ASSERT_EQUAL_NODE(&node45,&node55,0,&node50);
+     TEST_ASSERT_EQUAL_NODE(&node70,&node95,0,&node90);
 
 }
-/*
-              50
-            /   \
-          40    60
-          / \   /\
-        25  45 55  70
-        /
-      10
-*/
-void test_remove_70(void){
-  Node *root;
-  Node *root2=&node50;
+/**
+---------------------------------remove 30 and rotateLeft---------------------------------
+*        40 (1)                            40 (+2)                             50
+*       /   \           remove 30            \                 rotate left    /   \
+*     30     50 (+1)   ---------->            50(1)        -------------->  40    100
+*            \                                 \
+*            100                               100
+*
+**/
+void test_remove_rotateleft1(void){
+
+    initNode(&node30,NULL,NULL,0);
+    initNode(&node100,NULL,NULL,0);
+    initNode(&node50,NULL,&node100,1);
+    initNode(&node40,&node30,&node50,1);
+
+    Node *root = &node40;
+    root=nodeRemove(&root,30);
+    TEST_ASSERT_EQUAL_PTR(&node50,root);
+    TEST_ASSERT_EQUAL_NODE(&node40,&node100,0,&node50);
+    TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node40);
+    TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node100);
+
+}
+
+/**
+---------------------------------remove 30 and rotateLeft---------------------------------
+*        40 (1)                            40 (+2)                             50
+*       /   \           remove 30            \                 rotate left    /   \
+*     30     50 (0)   ---------->            50(0)        -------------->  40    100
+*            /\                              /   \                          \
+*          45  100                         45   100                         45
+*
+**/
+void test_remove_rotateleft2(void){
+
+    initNode(&node30,NULL,NULL,0);
+    initNode(&node100,NULL,NULL,0);
+    initNode(&node45,NULL,NULL,0);
+    initNode(&node50,&node45,&node100,0);
+    initNode(&node40,&node30,&node50,1);
+
+    Node *root = &node40;
+    root=nodeRemove(&root,30);
+    TEST_ASSERT_EQUAL_PTR(&node50,root);
+    TEST_ASSERT_EQUAL_NODE(&node40,&node100,-1,&node50);
+    TEST_ASSERT_EQUAL_NODE(NULL,&node45,1,&node40);
+    TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node100);
+
+
+}
+/**
+---------------------------------remove 15 and rotateLeft---------------------------------
+*        30 (1)                            30 (2)                                   40
+*       /   \           remove 15         /  \                 rotateRightleft    /   \
+*     20     50 (-1)   ------------>    20    50(-1)        ----------------   30     50
+*    /       /\                              /   \                             / \      \
+*  15      40  100                         40   100                          20 35      100
+*         /                                /
+*       35                               35
+*
+*
+**/
+
+void test_remove_given_Avl_tree_remove_15_then_rotaterightleft_condition1_(void){
+
+     initNode(&node15,NULL,NULL,0);
+     initNode(&node35,NULL,NULL,0);
+     initNode(&node100,NULL,NULL,0);
+     initNode(&node40,&node35,NULL,-1);
+     initNode(&node50,&node40,&node100,-1);
+     initNode(&node30,&node20,&node50,1);
+     initNode(&node20,&node15,NULL,-1);
+
+     Node *root = &node30;
+     root=nodeRemove(&root,15);
+     TEST_ASSERT_EQUAL_PTR(&node40,root);
+     TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node20);
+     TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node35);
+     TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node100);
+     TEST_ASSERT_EQUAL_NODE(&node30,&node50,0,&node40);
+     TEST_ASSERT_EQUAL_NODE(NULL,&node100,1,&node50);
+     TEST_ASSERT_EQUAL_NODE(&node20,&node35,0,&node30);
+}
+/**
+---------------------------------remove 15 and rotateLeft---------------------------------
+*        30 (1)                            30 (2)                                   40
+*       /   \           remove 15         /  \                 rotateRightleft    /   \
+*     20     50 (-1)   ------------>    20    50(-1)        ----------------   30     50
+*    /       /\                              /   \                             / \    / \
+*  15      40  100                         40   100                          20 35  45    100
+*         / \                             / \
+*       35  45                           35 45
+*
+*
+**/
+void test_remove_given_Avl_tree_remove_15_then_rotaterightleft_condition2_(void){
+
+     initNode(&node15,NULL,NULL,0);
+     initNode(&node45,NULL,NULL,0);
+     initNode(&node35,NULL,NULL,0);
+     initNode(&node100,NULL,NULL,0);
+     initNode(&node40,&node35,&node45,0);
+     initNode(&node50,&node40,&node100,-1);
+     initNode(&node30,&node20,&node50,1);
+     initNode(&node20,&node15,NULL,-1);
+
+     Node *root = &node30;
+     root=nodeRemove(&root,15);
+     TEST_ASSERT_EQUAL_PTR(&node40,root);
+     TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node20);
+     TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node35);
+     TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node100);
+     TEST_ASSERT_EQUAL_NODE(&node30,&node50,0,&node40);
+     TEST_ASSERT_EQUAL_NODE(&node45,&node100,0,&node50);
+     TEST_ASSERT_EQUAL_NODE(&node20,&node35,0,&node30);
+}
+/**
+---------------------------------remove 15 and rotateLeft---------------------------------
+*        30 (1)                            30 (2)                                   40
+*       /   \           remove 15         /  \                 rotateRightleft    /   \
+*     20     50 (-1)   ------------>    20    50(-1)        ----------------   30     50
+*    /       /\                              /   \                             /     /  \
+*  15      40  100                         40   100                          20   45   100
+*           \                              \
+*           45                              45
+*
+*
+**/
+void test_remove_given_Avl_tree_remove_15_then_rotaterightleft_condition3_(void){
+
+     initNode(&node15,NULL,NULL,0);
+     initNode(&node45,NULL,NULL,0);
+     initNode(&node100,NULL,NULL,0);
+     initNode(&node40,NULL,&node45,1);
+     initNode(&node50,&node40,&node100,-1);
+     initNode(&node30,&node20,&node50,1);
+     initNode(&node20,&node15,NULL,-1);
+
+     Node *root = &node30;
+     root=nodeRemove(&root,15);
+     TEST_ASSERT_EQUAL_PTR(&node40,root);
+     TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node20);
+     TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node35);
+     TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node100);
+     TEST_ASSERT_EQUAL_NODE(&node30,&node50,0,&node40);
+     TEST_ASSERT_EQUAL_NODE(&node45,&node100,0,&node50);
+     TEST_ASSERT_EQUAL_NODE(&node20,NULL,-1,&node30);
+}
+/**
+-----------------------------------------------------------------------------------------
+*        30 (1)                            40 (0)
+*       /   \           remove 30         /  \
+*     20     50 (-1)   ------------>    20    50(0)
+*    /       /\                         /     /   \
+*  15      40  100                     15    45   100
+*           \
+*           45
+*
+*
+**/
+void test_remove_30(void){
+
+     initNode(&node15,NULL,NULL,0);
+     initNode(&node45,NULL,NULL,0);
+     initNode(&node100,NULL,NULL,0);
+     initNode(&node40,NULL,&node45,1);
+     initNode(&node50,&node40,&node100,-1);
+     initNode(&node30,&node20,&node50,1);
+     initNode(&node20,&node15,NULL,-1);
+
+     Node *root = &node30;
+     root=nodeRemove(&root,30);
+     TEST_ASSERT_EQUAL_PTR(&node40,root);
+     TEST_ASSERT_EQUAL_NODE(&node15,NULL,-1,&node20);
+     TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node45);
+     TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node100);
+     TEST_ASSERT_EQUAL_PTR(&node20,node40.left);
+     TEST_ASSERT_EQUAL_PTR(&node50,node40.right);
+     TEST_ASSERT_EQUAL(0,node40.bf);
+     TEST_ASSERT_EQUAL_NODE(&node20,&node50,0,&node40);
+     TEST_ASSERT_EQUAL_NODE(&node45,&node100,0,&node50);
+}
+
+/**
+---------------------------------remove 15 and rotateLeft---------------------------------
+*        30 (1)                            50 (0)
+*       /   \           remove 30         /  \
+*     20     50 (1)   ------------>    20    100(0)
+*             \
+*            100
+*
+*
+*
+*
+**/
+void test_remove_given_Avl_tree_remove_30_50_movedUP(void){
+
+     initNode(&node100,NULL,NULL,0);
+     initNode(&node50,NULL,&node100,1);
+     initNode(&node30,&node20,&node50,1);
+     initNode(&node20,NULL,NULL,0);
+
+     Node *root = &node30;
+     root=nodeRemove(&root,30);
+     TEST_ASSERT_EQUAL_PTR(&node50,root);
+     TEST_ASSERT_EQUAL_NODE(&node20,&node100,0,&node50);
+}
+/**
+---------------------------------remove 15 and rotateLeft---------------------------------
+*        30 (1)                            40 (1)
+*       /   \           remove 30         /  \
+*     20     50 (0)   ------------>    20    50
+*            / \                              \
+*           40 100                            100
+*
+*
+*
+*
+**/
+void test_remove_given_Avl_tree_remove_30_40_movedUP(void){
+
+     initNode(&node100,NULL,NULL,0);
+     initNode(&node50,&node40,&node100,0);
+     initNode(&node30,&node20,&node50,1);
+     initNode(&node40,NULL,NULL,0);
+     initNode(&node20,NULL,NULL,0);
+
+     Node *root = &node30;
+     root=nodeRemove(&root,30);
+     TEST_ASSERT_EQUAL_PTR(&node40,root);
+     TEST_ASSERT_EQUAL_NODE(&node20,&node50,1,&node40);
+     TEST_ASSERT_EQUAL_PTR(NULL,node50.left);
+     TEST_ASSERT_EQUAL_PTR(&node100,node50.right);
+     TEST_ASSERT_EQUAL(1,node50.bf);
+     TEST_ASSERT_EQUAL_NODE(NULL,&node100,1,&node50);
+}
+/**
+---------------------------------remove 15 and rotateLeft---------------------------------
+*        30 (1)                          30(0)
+*          \           remove 50
+*         50 (0)   ------------>
+*
+**/
+void test_remove_given_Avl_tree_remove_50_30_left(void){
+
+     initNode(&node50,NULL,NULL,0);
+     initNode(&node30,NULL,&node50,1);
+
+     Node *root = &node30;
+     root=nodeRemove(&root,50);
+     TEST_ASSERT_EQUAL_PTR(&node30,root);
+     TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node30);
+}
+
+
+/**
+---------------------------------------remove 60----------------------------------------
+*                  60                           60 (0)
+*                /    \       remove 40        /   \
+*               40      90    ---------->     30    90(1)
+*              /  \    /   \                 / \   /  \
+*            20   50  75   100             20  50  75  100
+*           / \    \   \                   /   / \   \
+*         10   30   55  80               10   35  55  80
+*               \
+*               35
+**/
+void test_remove_given_Avl_tree_remove_60_test2(void){
+
+  initNode(&node60,&node40,&node90,-1);
+  initNode(&node40,&node20,&node50,-1);
+  initNode(&node90,&node75,&node100,-1);
+  initNode(&node20,&node10,&node30,1);
+  initNode(&node50,NULL,&node55,1);
+  initNode(&node75,NULL,&node80,1);
+  initNode(&node100,NULL,NULL,0);
+  initNode(&node30,NULL,&node35,1);
   initNode(&node10,NULL,NULL,0);
-  initNode(&node25,&node10,NULL,0);
-  initNode(&node45,NULL,NULL,0);
-  initNode(&node40,&node25,&node45,0);
   initNode(&node55,NULL,NULL,0);
-  initNode(&node70,NULL,NULL,0);
-  initNode(&node60,&node55,&node70,0);
-  initNode(&node50,&node40,&node60,0);
-  TEST_ASSERT_EQUAL_PTR(&node70,node60.right);
-  root=nodeRemove(&root2,70);
-  TEST_ASSERT_EQUAL_PTR(root,&node50);
-  TEST_ASSERT_EQUAL_NODE(&node40,&node60,0,&node50);
-  //TEST_ASSERT_EQUAL_NODE(&node55,NULL,0,&node60);
+  initNode(&node80,NULL,NULL,0);
+  initNode(&node100,NULL,NULL,0);
+
+   Node *root = &node60;
+  root=nodeRemove(&root,40);
+  TEST_ASSERT_EQUAL_PTR(&node60,root);
+  TEST_ASSERT_EQUAL_NODE(&node30,&node90,0,&node60);
+  TEST_ASSERT_EQUAL_NODE(&node20,&node50,0,&node30);
+  TEST_ASSERT_EQUAL_NODE(&node35,&node55,0,&node50);
+  TEST_ASSERT_EQUAL_NODE(&node10,NULL,-1,&node20);
+  TEST_ASSERT_EQUAL_NODE(&node75,&node100,-1,&node90);
+  TEST_ASSERT_EQUAL_NODE(NULL,&node80,1,&node75);
 }
-void test_remove_55(void){
-  Node *root;
-  Node *root2=&node50;
+
+
+/**
+-------------------------------------------------------------------------------
+*                  25                           25 (-1)
+*                /    \       remove 20        /   \
+*               15      30    ---------->    5    30(1)
+*              /  \      \                  / \     \
+*            5    20    35                  1  15   35
+*           / \                               /
+*         1    10                             10
+*
+*
+**/
+void test_remove_given_Avl_tree_remove_20_test2(void){
+
+  initNode(&node1,NULL,NULL,0);
+  initNode(&node5,&node1,&node10,0);
   initNode(&node10,NULL,NULL,0);
-  initNode(&node25,&node10,NULL,0);
-  initNode(&node45,NULL,NULL,0);
-  initNode(&node40,&node25,&node45,0);
-  initNode(&node55,NULL,NULL,0);
-  initNode(&node70,NULL,NULL,0);
-  initNode(&node60,&node55,&node70,0);
-  initNode(&node50,&node40,&node60,0);
+  initNode(&node15,&node5,&node20,-1);
+  initNode(&node20,NULL,NULL,0);
+  initNode(&node25,&node15,&node30,-1);
+  initNode(&node30,NULL,&node35,1);
+  initNode(&node35,NULL,NULL,0);
 
-  root=nodeRemove(&root2,55);
-  TEST_ASSERT_EQUAL_PTR(root,&node50);
-  TEST_ASSERT_EQUAL_NODE(&node40,&node60,0,&node50);
-  TEST_ASSERT_EQUAL_NODE(NULL,&node70,0,&node60);
-
-}
-void test_remove_10(void){
-  Node *root;
-  Node *root2=&node50;
-  initNode(&node10,NULL,NULL,0);
-  initNode(&node25,&node10,NULL,0);
-  initNode(&node45,NULL,NULL,0);
-  initNode(&node40,&node25,&node45,0);
-  initNode(&node55,NULL,NULL,0);
-  initNode(&node70,NULL,NULL,0);
-  initNode(&node60,&node55,&node70,0);
-  initNode(&node50,&node40,&node60,0);
-
-  root=nodeRemove(&root2,10);
-  TEST_ASSERT_EQUAL_PTR(root,&node50);
-  TEST_ASSERT_EQUAL_NODE(&node40,&node60,0,&node50);
-  TEST_ASSERT_EQUAL_NODE(&node25,&node45,0,&node40);
-  TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node25);
-  TEST_ASSERT_EQUAL_NODE(&node55,&node70,0,&node60);
-}
-void test_remove_45(void){
-  Node *root;
-  Node *root2=&node50;
-  initNode(&node10,NULL,NULL,0);
-  initNode(&node25,&node10,NULL,0);
-  initNode(&node45,NULL,NULL,0);
-  initNode(&node40,&node25,&node45,0);
-  initNode(&node55,NULL,NULL,0);
-  initNode(&node70,NULL,NULL,0);
-  initNode(&node60,&node55,&node70,0);
-  initNode(&node50,&node40,&node60,0);
-
-  root=nodeRemove(&root2,45);
-  TEST_ASSERT_EQUAL_PTR(root,&node50);
-  TEST_ASSERT_EQUAL_NODE(&node40,&node60,0,&node50);
-  TEST_ASSERT_EQUAL_NODE(&node25,NULL,0,&node40);
-  TEST_ASSERT_EQUAL_NODE(&node55,&node70,0,&node60);
-}
-void test_remove_25(void){
-  Node *root;
-  Node *root2=&node50;
-  initNode(&node10,NULL,NULL,0);
-  initNode(&node25,&node10,NULL,0);
-  initNode(&node45,NULL,NULL,0);
-  initNode(&node40,&node25,&node45,0);
-  initNode(&node55,NULL,NULL,0);
-  initNode(&node70,NULL,NULL,0);
-  initNode(&node60,&node55,&node70,0);
-  initNode(&node50,&node40,&node60,0);
-
-
-  root=nodeRemove(&root2,25);
-  TEST_ASSERT_EQUAL_PTR(root,&node50);
-  TEST_ASSERT_EQUAL_NODE(&node40,&node60,0,&node50);
-  TEST_ASSERT_EQUAL_NODE(&node10,&node45,0,&node40);
-  TEST_ASSERT_EQUAL_NODE(&node55,&node70,0,&node60);
-}
-void test_remove_60(void){
-  Node *root;
-  Node *root2=&node50;
-  initNode(&node10,NULL,NULL,0);
-  initNode(&node25,&node10,NULL,0);
-  initNode(&node45,NULL,NULL,0);
-  initNode(&node40,&node25,&node45,0);
-  initNode(&node55,NULL,NULL,0);
-  initNode(&node70,NULL,NULL,0);
-  initNode(&node60,&node55,&node70,0);
-  initNode(&node50,&node40,&node60,0);
-
-
-  root=nodeRemove(&root2,60);
-  TEST_ASSERT_EQUAL_PTR(root,&node50);
-  TEST_ASSERT_EQUAL_NODE(&node40,&node70,0,&node50);
-  TEST_ASSERT_EQUAL_NODE(&node55,NULL,0,&node70);
-  TEST_ASSERT_EQUAL_NODE(&node55,&node70,0,&node60);
-}
-void test_remove_40(void){
-  Node *root;
-  Node *root2=&node50;
-  initNode(&node10,NULL,NULL,0);
-  initNode(&node25,&node10,NULL,0);
-  initNode(&node45,NULL,NULL,0);
-  initNode(&node40,&node25,&node45,0);
-  initNode(&node55,NULL,NULL,0);
-  initNode(&node70,NULL,NULL,0);
-  initNode(&node60,&node55,&node70,0);
-  initNode(&node50,&node40,&node60,0);
-
-
-  root=nodeRemove(&root2,40);
-  TEST_ASSERT_EQUAL_PTR(root,&node50);
-  TEST_ASSERT_EQUAL_NODE(&node45,&node60,0,&node50);
-  TEST_ASSERT_EQUAL_PTR(&node25,node45.left);
-  TEST_ASSERT_EQUAL_PTR(NULL,node45.right);
-  TEST_ASSERT_EQUAL_NODE(&node25,NULL,0,&node45);
-  TEST_ASSERT_EQUAL_NODE(&node55,&node70,0,&node60);
-}
-void test_remove_root(void){
-  Node *root;
-  initNode(&node55,NULL,NULL,0);
-  root=removeRoot(&node55);
-}
-
-void test_remove_50(void){
-  Node *root;
-  Node *root2=&node50;
-  initNode(&node10,NULL,NULL,0);
-  initNode(&node25,&node10,NULL,0);
-  initNode(&node45,NULL,NULL,0);
-  initNode(&node40,&node25,&node45,0);
-  initNode(&node55,NULL,NULL,0);
-  initNode(&node70,NULL,NULL,0);
-  initNode(&node60,&node55,&node70,0);
-  initNode(&node50,&node40,&node60,0);
-
-  root=nodeRemove(&root2,50);
-  TEST_ASSERT_EQUAL_PTR(root,&node55);
-  TEST_ASSERT_EQUAL_NODE(&node40,&node60,0,&node55);
-  TEST_ASSERT_EQUAL_NODE(&node25,&node45,0,&node40);
-  TEST_ASSERT_EQUAL_NODE(&node55,&node70,0,&node60);
+  Node *root = &node25;
+  root=nodeRemove(&root,20);
+  TEST_ASSERT_EQUAL_PTR(&node25,root);
+  TEST_ASSERT_EQUAL_PTR(&node5,node25.left);
+  TEST_ASSERT_EQUAL_PTR(&node30,node25.right);
+  TEST_ASSERT_EQUAL(-1,node25.bf);
+  TEST_ASSERT_EQUAL_NODE(&node5,&node30,-1,&node25);
+  TEST_ASSERT_EQUAL_NODE(&node1,&node15,1,&node5);
+  TEST_ASSERT_EQUAL_NODE(&node20,&node50,0,&node30);
+  TEST_ASSERT_EQUAL_NODE(&node35,&node55,0,&node50);
+  TEST_ASSERT_EQUAL_NODE(&node10,NULL,-1,&node20);
+  TEST_ASSERT_EQUAL_NODE(&node75,&node100,-1,&node90);
+  TEST_ASSERT_EQUAL_NODE(NULL,&node80,1,&node75);
 }
