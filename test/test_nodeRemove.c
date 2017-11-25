@@ -39,7 +39,17 @@ void test_nodeRemove_given_40_remove_expect_NULL(void){
 *       /          remove 40
 *     30 (0)  --------------->
 *
-**/
+*/
+void test_nodeRemove_given_40_with_child_30_delete_40_expect_30_only(void){
+
+    initNode(&node30,NULL,NULL,0);
+    initNode(&node40,&node30,NULL,-1);
+
+    Node *root = &node40;
+    root=nodeRemove(&root,40);
+    TEST_ASSERT_EQUAL_PTR(&node30,root);
+    TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node30);
+}
 void test_nodeRemove_given_40_with_child_30_delete_30_expect_40_only(void){
 
     initNode(&node30,NULL,NULL,0);
@@ -50,6 +60,7 @@ void test_nodeRemove_given_40_with_child_30_delete_30_expect_40_only(void){
     TEST_ASSERT_EQUAL_PTR(&node40,root);
     TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node40);
 }
+
 /**
 ---------------------------------remove 50------------------------------
 *       40(0)                              40 (-1)
@@ -275,7 +286,6 @@ void test_remove_rotateleft2(void){
 **/
 
 void test_remove_given_Avl_tree_remove_15_then_rotaterightleft_condition1_(void){
-
      initNode(&node15,NULL,NULL,0);
      initNode(&node35,NULL,NULL,0);
      initNode(&node100,NULL,NULL,0);
@@ -496,12 +506,17 @@ void test_remove_given_Avl_tree_remove_60_test2(void){
    Node *root = &node60;
   root=nodeRemove(&root,40);
   TEST_ASSERT_EQUAL_PTR(&node60,root);
-  TEST_ASSERT_EQUAL_NODE(&node30,&node90,0,&node60);
-  TEST_ASSERT_EQUAL_NODE(&node20,&node50,0,&node30);
-  TEST_ASSERT_EQUAL_NODE(&node35,&node55,0,&node50);
-  TEST_ASSERT_EQUAL_NODE(&node10,NULL,-1,&node20);
-  TEST_ASSERT_EQUAL_NODE(&node75,&node100,-1,&node90);
-  TEST_ASSERT_EQUAL_NODE(NULL,&node80,1,&node75);
+TEST_ASSERT_EQUAL_NODE(&node30,&node90,0,&node60);
+TEST_ASSERT_EQUAL_NODE(&node20,&node50,0,&node30);
+TEST_ASSERT_EQUAL_NODE(&node75,&node100,-1,&node90);
+TEST_ASSERT_EQUAL_NODE(&node35,&node55,0,&node50);
+TEST_ASSERT_EQUAL_NODE(&node10,NULL,-1,&node20);
+TEST_ASSERT_EQUAL_NODE(NULL,&node80,1,&node75);
+TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node10);
+TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node35);
+TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node55);
+TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node80);
+TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node100);
 }
 
 
@@ -536,9 +551,6 @@ void test_remove_given_Avl_tree_remove_20_test2(void){
   TEST_ASSERT_EQUAL(-1,node25.bf);
   TEST_ASSERT_EQUAL_NODE(&node5,&node30,-1,&node25);
   TEST_ASSERT_EQUAL_NODE(&node1,&node15,1,&node5);
-  TEST_ASSERT_EQUAL_NODE(&node20,&node50,0,&node30);
-  TEST_ASSERT_EQUAL_NODE(&node35,&node55,0,&node50);
-  TEST_ASSERT_EQUAL_NODE(&node10,NULL,-1,&node20);
-  TEST_ASSERT_EQUAL_NODE(&node75,&node100,-1,&node90);
-  TEST_ASSERT_EQUAL_NODE(NULL,&node80,1,&node75);
+  TEST_ASSERT_EQUAL_NODE(NULL,&node35,1,&node30);
+  TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node20);
 }

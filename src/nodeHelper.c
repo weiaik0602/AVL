@@ -8,7 +8,7 @@ void initNode (Node *node, Node *left, Node *right, int bf){
   node->left = left;
   node->right = right;
   node->bf = bf;
-
+  node->lock=0;
 }
 
 void giveInitdata(void){
@@ -33,5 +33,4 @@ void giveInitdata(void){
   node90.data = 90 ;
   node95.data = 95 ;
   node100.data = 100 ;
-
 }

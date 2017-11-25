@@ -46,13 +46,11 @@ Node *findNearest(Node *rootPtr,int choose){
 }
 
 Node *removeRoot(Node *Remove){
-  Node *node=Remove;
   Node *Nearest;
   if(Remove->right!=NULL){
-    if(Remove->right->bf==0)
+    if(Remove->right->bf==0 && Remove->right->left!=NULL)
       Remove->lock=1;
     Nearest=findNearest(Remove->right,LEFT);
-    node=Nearest;
     if(Remove->lock==0)
       Nearest->bf=(Remove->bf)-1;
     else
@@ -63,12 +61,12 @@ Node *removeRoot(Node *Remove){
     }
     else
       Nearest->left=Remove->left;
+  return Nearest;
   }
   else if(Remove->left!=NULL){
-    if(Remove->left->bf==0)
+    if(Remove->left->bf==0 && Remove->left->left!=NULL)
       Remove->lock=1;
     Nearest=findNearest(Remove->left,RIGHT);
-    node=Nearest;
     if(Remove->lock==0)
       Nearest->bf=(Remove->bf)+1;
     else
@@ -79,35 +77,34 @@ Node *removeRoot(Node *Remove){
     }
     else
       Nearest->right=Remove->right;
+  return Nearest;
   }
   else
     return NULL;
 
 
-  return Nearest;
 }
 
 
 
 Node *nodeRemove(Node **rootPtr, int valToRemove  ){
   Node *node = *rootPtr;
+  //node->lock=0;
+  if(node->left!=NULL&&node->left->left!=NULL&&node->left->bf==0)
+    node->left->lock=1;
+  if(node->right!=NULL&&node->right->right!=NULL&&node->right->bf==0)
+      node->right->lock=1;
   if(valToRemove < node->data){
-    if(node->left!=NULL&&node->right!=NULL&&node->left->left!=NULL&&node->right->right!=NULL){
-    if((node->left->bf==0 &&node->left->left!=NULL)||(node->right->bf==0 &&node->right->right!=NULL))
-      node->lock=1;
-    else
-      node->lock=node->left->lock;
-    }
     node->left=nodeRemove(&(node->left),valToRemove);
+    if(node->left!=NULL)
+      node->lock=node->left->lock;
     if(node->lock==0)
       node->bf+=1;
   }
   else if(valToRemove > node->data){
-    if((node->left->bf==0 &&node->left->left!=NULL)||(node->right->bf==0 &&node->right->left!=NULL))
-      node->lock=1;
-    else
-      node->lock=node->right->lock;
     node->right=nodeRemove(&(node->right),valToRemove);
+    if(node->right!=NULL)
+      node->lock=node->right->lock;
     if(node->lock==0)
       node->bf-=1;
   }

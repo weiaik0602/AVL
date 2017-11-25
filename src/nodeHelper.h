@@ -12,5 +12,4 @@ void giveInitdata(void);
 
 
 
-
 #endif // _NODEHELPER_H
