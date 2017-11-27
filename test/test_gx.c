@@ -19,7 +19,7 @@ void tearDown(void)
 
 /**
  *    NULL    --->    NULL
- */
+*/
 void test_deleteLeaf_given_NULL(void){
     Node *root;
     root = NULL;
@@ -224,7 +224,6 @@ void test_deleteNonLeaf_given_5_3_1_10_delete_15_expect_1_5_10(void)
     TEST_ASSERT_EQUAL_NODE2(&node5, &node1, &node10, 0);
     TEST_ASSERT_EQUAL_NODE2(&node1, NULL, NULL, 0);
     TEST_ASSERT_EQUAL_NODE2(&node10, NULL, NULL, 0);
-    // TEST_ASSERT_EQUAL(heightChanged, CHANGED);
 }
 
 /**

@@ -10,11 +10,14 @@
 
 #define LEFT 0
 #define RIGHT 1
+#define UNCHANGE 0
+#define CHANGED 1
 
-
-Node *findNearest(Node *rootPtr,int choose);
+Node *findNearestO(Node *rootPtr,int choose);
 Node *removeRoot(Node *Remove);
 Node *nodeRemove(Node **rootPtr, int valToRemove);
 
-Node *Nearest99(Node *node,int choose);
+Node *avlRemove(Node **rootPtr, int data);
+Node *_avlRemove(Node **root, int nodeToRemove ,int *heightchange);
+Node *findnearest(Node **rootPtr, int *heightchange);
 #endif // _NODEREMOVE_H
