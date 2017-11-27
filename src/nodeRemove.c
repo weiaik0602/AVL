@@ -1,9 +1,9 @@
 #include "nodeRemove.h"
 
 
-int hc;
 
 
+/*
 Node *findNearest(Node *rootPtr,int choose){
   Node *child;
   if(choose==LEFT){
@@ -11,7 +11,7 @@ Node *findNearest(Node *rootPtr,int choose){
     if(child!=NULL){
       if(child->left!=NULL){
         rootPtr->bf+=1;
-        findNearest(rootPtr->left,choose);
+        child=findNearest(rootPtr->left,choose);
       }
       else{
         if(child->right!=NULL){
@@ -20,18 +20,17 @@ Node *findNearest(Node *rootPtr,int choose){
         else
           rootPtr->left=NULL;
         rootPtr->bf+=1;
-        return child;
         }
       }
     else
       return rootPtr;
   }
-  if(choose==RIGHT){
+  else if(choose==RIGHT){
     child=rootPtr->right;
     if(child!=NULL){
       if(child->right!=NULL){
         rootPtr->bf+=1;
-        findNearest(rootPtr->right,choose);
+        child=findNearest(rootPtr->right,choose);
       }
       else{
         if(child->left!=NULL){
@@ -40,11 +39,34 @@ Node *findNearest(Node *rootPtr,int choose){
         else
           rootPtr->right=NULL;
         rootPtr->bf-=1;
-        return child;
         }
       }
     else
       return rootPtr;
+  }
+
+  if(rootPtr!=NULL){
+    if(rootPtr->bf==2  ||  rootPtr->bf==-2 ){
+      avlbalance(&rootPtr);
+    }
+  }
+  return child;
+}
+
+*/
+Node *findNearest(Node *node,int choose){
+  if(choose==LEFT){
+    if(node->left!=NULL){
+      findNearest(node->left,choose);
+    }
+    else
+      return node;
+  }
+  else if(choose==RIGHT){
+    if(node->right!=NULL){
+      findNearest(node->right,choose);}
+    else
+      return node;
   }
 }
 
@@ -54,51 +76,47 @@ Node *removeRoot(Node *Remove){
     if(Remove->right->bf==0 && Remove->right->right!=NULL)
       Remove->lock=Remove->right->lock;
     Nearest=findNearest(Remove->right,LEFT);
-    if(Nearest==Remove->right){
+    nodeRemove(&(Remove->right),Nearest->data);
+    if(Remove->right==NULL){
         Nearest->bf=(Remove->bf)-1;
         Nearest->lock=(Remove->lock);
+        Nearest->left=Remove->left;
       }
     else{
       if(Remove->lock==1)
         Nearest->bf=Remove->bf;
       else
         Nearest->bf=(Remove->bf)-1;
-    }
-    if(Remove->right!=Nearest){
+
       Nearest->left=Remove->left;
       Nearest->right=Remove->right;
     }
-    else
-      Nearest->left=Remove->left;
   return Nearest;
   }
   else if(Remove->left!=NULL){
     if(Remove->left->bf==0 && Remove->left->right!=NULL)
       Remove->lock=Remove->left->lock;
     Nearest=findNearest(Remove->left,RIGHT);
-    if(Nearest==Remove->left){
+    nodeRemove(&(Remove->left),Nearest->data);
+    if(Remove->left==NULL){
         Nearest->bf=(Remove->bf)+1;
         Nearest->lock=(Remove->lock);
-    }
+        Nearest->right=Remove->right;
+      }
     else{
       if(Remove->lock==1)
         Nearest->bf=Remove->bf;
       else
         Nearest->bf=(Remove->bf)+1;
-    }
 
-    if(Remove->left!=Nearest){
       Nearest->left=Remove->left;
       Nearest->right=Remove->right;
     }
-    else
-      Nearest->right=Remove->right;
+
   return Nearest;
   }
   else
     return NULL;
-
-
 }
 
 
@@ -106,8 +124,9 @@ Node *removeRoot(Node *Remove){
 Node *nodeRemove(Node **rootPtr, int valToRemove  ){
   Node *node = *rootPtr;
   if(node!=NULL){
+    //node->lock=0;/*
     if(node->left!=NULL&&node->left->left!=NULL&&node->left->bf==0)
-    node->left->lock=1;
+      node->left->lock=1;
     if(node->right!=NULL&&node->right->right!=NULL&&node->right->bf==0)
       node->right->lock=1;
 
@@ -116,6 +135,8 @@ Node *nodeRemove(Node **rootPtr, int valToRemove  ){
     node->left=nodeRemove(&(node->left),valToRemove);
     if(node->left!=NULL)
       node->lock=node->left->lock;
+    else
+      node->lock=0;
     if(node->lock==0)
       node->bf+=1;
   }
@@ -123,6 +144,8 @@ Node *nodeRemove(Node **rootPtr, int valToRemove  ){
     node->right=nodeRemove(&(node->right),valToRemove);
     if(node->right!=NULL)
       node->lock=node->right->lock;
+    else
+      node->lock=0;
     if(node->lock==0)
       node->bf-=1;
   }
@@ -138,6 +161,7 @@ Node *nodeRemove(Node **rootPtr, int valToRemove  ){
       avlbalance(&node);
     }
   }
+
     *rootPtr=node;
     return node;
 }

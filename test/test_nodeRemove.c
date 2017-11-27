@@ -397,10 +397,10 @@ void test_remove_30(void){
      TEST_ASSERT_EQUAL_NODE(&node15,NULL,-1,&node20);
      TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node45);
      TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node100);
-     TEST_ASSERT_EQUAL_PTR(&node20,node40.left);
-     TEST_ASSERT_EQUAL_PTR(&node50,node40.right);
-     TEST_ASSERT_EQUAL(0,node40.bf);
      TEST_ASSERT_EQUAL_NODE(&node20,&node50,0,&node40);
+     TEST_ASSERT_EQUAL_PTR(&node45,node50.left);
+     TEST_ASSERT_EQUAL_PTR(&node100,node50.right);
+     TEST_ASSERT_EQUAL(0,node50.bf);
      TEST_ASSERT_EQUAL_NODE(&node45,&node100,0,&node50);
 }
 

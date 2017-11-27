@@ -261,7 +261,7 @@ void test_deleteLeaf_given_deletedNode_left_right_Not_null_delete_15(void)
 }
 
 /**
- *
+ ````*````
  *         5                                 5
  *       /  \                              /  \
  *      4    15      delete node 15       4   10
@@ -382,6 +382,9 @@ void test_nodeRemove_replace_and_rotate_rightLeft(void){
     TEST_ASSERT_EQUAL_PTR(root,&node45);
     TEST_ASSERT_EQUAL_NODE2(&node50, NULL, NULL, 0);
     TEST_ASSERT_EQUAL_NODE2(&node35, NULL, NULL, 0);
+    TEST_ASSERT_EQUAL_PTR(&node50,node60.left);
+    TEST_ASSERT_EQUAL_PTR(&node70,node60.right);
+    TEST_ASSERT_EQUAL(0,node60.bf);
     TEST_ASSERT_EQUAL_NODE2(&node60, &node50, &node70, 0);
     TEST_ASSERT_EQUAL_NODE2(&node30, NULL, &node35, 1);
     TEST_ASSERT_EQUAL_NODE2(&node45, &node30, &node60, 0);
@@ -482,4 +485,40 @@ void test_nodeRemove_replace_and_child_rotate_R_rootPtr_bf_nochanged(void)
     TEST_ASSERT_EQUAL_NODE2(&node10, NULL, NULL, 0);
     TEST_ASSERT_EQUAL_NODE2(&node30, &node20, &node60, 0);
     TEST_ASSERT_EQUAL_NODE2(&node70, NULL, NULL, 0);
+}
+
+/**
+ *       15                                               20
+ *      /  \              delete 15                      / \
+ *     10   25     child rotate left before return      10  30
+ *    /    / \            --->                         /    /\
+ *   5    20  30                                      5    25 35
+ *             \
+ *              35
+ */
+
+void test_nodeRemove_replace_and_child_rotate_L(void)
+{
+    initNode(&node5, NULL, NULL, 0);
+    initNode(&node20, NULL, NULL, 0);
+    initNode(&node35,NULL, NULL, 0);
+    initNode(&node30, NULL, &node35, 1);
+    initNode(&node10, &node5, NULL, -1);
+    initNode(&node25, &node20, &node30, 1);
+    initNode(&node15, &node10, &node25, 1);
+
+    Node *root = &node15;
+    nodeRemove(&root, 15);
+    TEST_ASSERT_EQUAL_PTR(root,&node20);
+    TEST_ASSERT_EQUAL_NODE2(&node5, NULL, NULL, 0);
+    TEST_ASSERT_EQUAL_NODE2(&node25, NULL, NULL, 0);
+    TEST_ASSERT_EQUAL_NODE2(&node35, NULL, NULL, 0);
+    TEST_ASSERT_EQUAL_NODE2(&node30, &node25, &node35, 0);
+    TEST_ASSERT_EQUAL_PTR(&node10,node20.left);
+    TEST_ASSERT_EQUAL_PTR(&node30,node20.right);
+    TEST_ASSERT_EQUAL(0,node20.bf);
+    TEST_ASSERT_EQUAL_NODE2(&node20, &node10, &node30, 0);
+    TEST_ASSERT_EQUAL_NODE2(&node10, &node5, NULL, -1);
+
+
 }
