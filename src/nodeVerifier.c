@@ -39,6 +39,25 @@ void testAssertEqualNode(Node *left, Node *right, int bf, Node *node,int lineNo)
                             right,node->right);
     UNITY_TEST_FAIL(lineNo,error);
     }
+}
+
+void testAssertEqualNode2(Node *node,Node *left, Node *right, int bf, int lineNo){
+  char *error;
+  if(left != node->left){
+      error = createMessage("Expected left node to be 0x%p, but was %p",  \
+                            left,node->left);
+      UNITY_TEST_FAIL(lineNo,error);
+    }
+  else if(bf != node->bf){
+    error = createMessage("Expected balance factor to be 0x%p, but was %p",  \
+                          bf,node->bf);
+    UNITY_TEST_FAIL(lineNo,error);
+  }
 
 
+  else if(right != node->right){
+      error = createMessage("Expected right node to be 0x%p, but was %p",  \
+                            right,node->right);
+    UNITY_TEST_FAIL(lineNo,error);
+    }
 }

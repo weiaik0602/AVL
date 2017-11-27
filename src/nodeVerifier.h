@@ -7,4 +7,9 @@
 
 void testAssertEqualNode(Node *left, Node *right, int bf, Node *node,int lineNo);
 
+
+#define TEST_ASSERT_EQUAL_NODE2(node,left,right,bf) \
+                          testAssertEqualNode2(node,left,right,bf,__LINE__)
+void testAssertEqualNode2(Node *node,Node *left, Node *right, int bf, int lineNo);
+
 #endif // _NODEVERIFIER_H
