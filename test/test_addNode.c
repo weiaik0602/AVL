@@ -129,3 +129,17 @@ void test_addNode_40_t0_30_rightchild(void)
     TEST_ASSERT_EQUAL_PTR(&node5,node10.left);
 
 }
+
+void test_addNode_duplicate(void)
+{   Node *root = &node10;
+    initNode(&node10,&node5,&node30,-1);
+    initNode(&node5,&node1,NULL,-1);
+    initNode(&node30,NULL,NULL,0);
+
+    addNode(&root,&node1);
+    TEST_ASSERT_EQUAL_PTR(&node10,root);
+    TEST_ASSERT_EQUAL_NODE(&node5,&node30,-1,&node10);
+    TEST_ASSERT_EQUAL_NODE(&node1,NULL,-1,&node5);
+    
+
+}
