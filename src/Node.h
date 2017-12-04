@@ -7,8 +7,13 @@ typedef struct Node Node;
 struct Node {
   Node *left;
   Node *right;
-  int bf;
-  int data;
+  int balanceFactor;
+  void *data;
   int lock;
 };
+
+
+typedef int (*Compare)(void *data, Node *refNode);
+// /typedef int (*CompareWithVoidPtr)(void *, Node *);
+
 #endif // _NODE_H

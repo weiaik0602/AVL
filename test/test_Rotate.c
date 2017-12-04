@@ -6,10 +6,10 @@
 Node node1, node5,node10,node15,node20,node25,node30,node35,node40,
       node45,node50,node70,node60;
 
-void initNode(Node *node,Node *Left, Node *Right, int bf){
+void initNode(Node *node,Node *Left, Node *Right, int balanceFactor){
   node->left=Left;
   node->right=Right;
-  node->bf=bf;
+  node->balanceFactor=balanceFactor;
 }
 void setUp(void)
 {
@@ -152,11 +152,11 @@ void test_RotateLeft_BF_20x(void)
   initNode(&node50,NULL,NULL,0);
   initNode(&node40,&node35,&node50,0);
   initNode(&node30,NULL,&node40,2);
-  TEST_ASSERT_EQUAL(node30.bf,2);
+  TEST_ASSERT_EQUAL(node30.balanceFactor,2);
   Node *root = &node30;
   avlbalance(&root);
-  TEST_ASSERT_EQUAL(node40.bf,-1);
-  TEST_ASSERT_EQUAL(node30.bf,1);
+  TEST_ASSERT_EQUAL(node40.balanceFactor,-1);
+  TEST_ASSERT_EQUAL(node30.balanceFactor,1);
 }
 /*
             30(2)                       40(0)
@@ -172,8 +172,8 @@ void test_RotateLeft_BF_21x(void)
   initNode(&node40,NULL,&node50,1);
   initNode(&node30,NULL,&node40,2);
   avlbalance(&root);
-  TEST_ASSERT_EQUAL(node40.bf,0);
-  TEST_ASSERT_EQUAL(node30.bf,0);
+  TEST_ASSERT_EQUAL(node40.balanceFactor,0);
+  TEST_ASSERT_EQUAL(node30.balanceFactor,0);
 }
 
 /*
@@ -192,10 +192,10 @@ void test_RotateRight_BF_neg20(void)
   initNode(&node30,&node10,NULL,-2);
 
   avlbalance(&root);
-  TEST_ASSERT_EQUAL(node10.bf,1);
-  TEST_ASSERT_EQUAL(node5.bf,0);
-  TEST_ASSERT_EQUAL(node30.bf,-1);
-  TEST_ASSERT_EQUAL(node20.bf,0);
+  TEST_ASSERT_EQUAL(node10.balanceFactor,1);
+  TEST_ASSERT_EQUAL(node5.balanceFactor,0);
+  TEST_ASSERT_EQUAL(node30.balanceFactor,-1);
+  TEST_ASSERT_EQUAL(node20.balanceFactor,0);
 }
 
 /*
@@ -213,9 +213,9 @@ void test_RotateRight_BF_neg2neg1(void)
   initNode(&node30,&node10,NULL,-2);
 
   avlbalance(&root);
-  TEST_ASSERT_EQUAL(node10.bf,0);
-  TEST_ASSERT_EQUAL(node5.bf,0);
-  TEST_ASSERT_EQUAL(node30.bf,0);
+  TEST_ASSERT_EQUAL(node10.balanceFactor,0);
+  TEST_ASSERT_EQUAL(node5.balanceFactor,0);
+  TEST_ASSERT_EQUAL(node30.balanceFactor,0);
 }
 
 
@@ -229,12 +229,12 @@ void test_rotate_leftright_BF_neg211(void)
     initNode(&node50,&node20,&node60,-2);
 
     avlbalance(&root);
-    TEST_ASSERT_EQUAL(node10.bf,0);
-    TEST_ASSERT_EQUAL(node40.bf,0);
-    TEST_ASSERT_EQUAL(node60.bf,0);
-    TEST_ASSERT_EQUAL(node20.bf,-1);
-    TEST_ASSERT_EQUAL(node50.bf,0);
-    TEST_ASSERT_EQUAL(node30.bf,0);
+    TEST_ASSERT_EQUAL(node10.balanceFactor,0);
+    TEST_ASSERT_EQUAL(node40.balanceFactor,0);
+    TEST_ASSERT_EQUAL(node60.balanceFactor,0);
+    TEST_ASSERT_EQUAL(node20.balanceFactor,-1);
+    TEST_ASSERT_EQUAL(node50.balanceFactor,0);
+    TEST_ASSERT_EQUAL(node30.balanceFactor,0);
 }
 void test_rotate_leftright_BF_neg210(void)
 {   Node *root=&node50;
@@ -247,12 +247,12 @@ void test_rotate_leftright_BF_neg210(void)
     initNode(&node50,&node20,&node60,-2);
 
     avlbalance(&root);
-    TEST_ASSERT_EQUAL(node10.bf,0);
-    TEST_ASSERT_EQUAL(node40.bf,0);
-    TEST_ASSERT_EQUAL(node60.bf,0);
-    TEST_ASSERT_EQUAL(node20.bf,0);
-    TEST_ASSERT_EQUAL(node50.bf,0);
-    TEST_ASSERT_EQUAL(node30.bf,0);
+    TEST_ASSERT_EQUAL(node10.balanceFactor,0);
+    TEST_ASSERT_EQUAL(node40.balanceFactor,0);
+    TEST_ASSERT_EQUAL(node60.balanceFactor,0);
+    TEST_ASSERT_EQUAL(node20.balanceFactor,0);
+    TEST_ASSERT_EQUAL(node50.balanceFactor,0);
+    TEST_ASSERT_EQUAL(node30.balanceFactor,0);
 }
 void test_rotate_leftright_BF_neg21neg1(void)
 {   Node *root=&node50;
@@ -264,12 +264,12 @@ void test_rotate_leftright_BF_neg21neg1(void)
     initNode(&node50,&node20,&node60,-2);
 
     avlbalance(&root);
-    TEST_ASSERT_EQUAL(node10.bf,0);
-    TEST_ASSERT_EQUAL(node40.bf,0);
-    TEST_ASSERT_EQUAL(node60.bf,0);
-    TEST_ASSERT_EQUAL(node20.bf,0);
-    TEST_ASSERT_EQUAL(node50.bf,1);
-    TEST_ASSERT_EQUAL(node30.bf,0);
+    TEST_ASSERT_EQUAL(node10.balanceFactor,0);
+    TEST_ASSERT_EQUAL(node40.balanceFactor,0);
+    TEST_ASSERT_EQUAL(node60.balanceFactor,0);
+    TEST_ASSERT_EQUAL(node20.balanceFactor,0);
+    TEST_ASSERT_EQUAL(node50.balanceFactor,1);
+    TEST_ASSERT_EQUAL(node30.balanceFactor,0);
 }
 
 void test_rotate_rightleft_BF_2neg1neg1(void)
@@ -282,12 +282,12 @@ void test_rotate_rightleft_BF_2neg1neg1(void)
     initNode(&node50,&node40,&node60,-1);
 
     avlbalance(&root);
-    TEST_ASSERT_EQUAL(node10.bf,0);
-    TEST_ASSERT_EQUAL(node40.bf,0);
-    TEST_ASSERT_EQUAL(node60.bf,0);
-    TEST_ASSERT_EQUAL(node20.bf,0);
-    TEST_ASSERT_EQUAL(node50.bf,1);
-    TEST_ASSERT_EQUAL(node30.bf,0);
+    TEST_ASSERT_EQUAL(node10.balanceFactor,0);
+    TEST_ASSERT_EQUAL(node40.balanceFactor,0);
+    TEST_ASSERT_EQUAL(node60.balanceFactor,0);
+    TEST_ASSERT_EQUAL(node20.balanceFactor,0);
+    TEST_ASSERT_EQUAL(node50.balanceFactor,1);
+    TEST_ASSERT_EQUAL(node30.balanceFactor,0);
 }
 
 void test_rotate_rightleft_BF_2neg10(void)
@@ -300,12 +300,12 @@ void test_rotate_rightleft_BF_2neg10(void)
     initNode(&node50,&node40,&node60,-1);
 
     avlbalance(&root);
-    TEST_ASSERT_EQUAL(node10.bf,0);
-    TEST_ASSERT_EQUAL(node40.bf,0);
-    TEST_ASSERT_EQUAL(node60.bf,0);
-    TEST_ASSERT_EQUAL(node20.bf,0);
-    TEST_ASSERT_EQUAL(node50.bf,0);
-    TEST_ASSERT_EQUAL(node30.bf,0);
+    TEST_ASSERT_EQUAL(node10.balanceFactor,0);
+    TEST_ASSERT_EQUAL(node40.balanceFactor,0);
+    TEST_ASSERT_EQUAL(node60.balanceFactor,0);
+    TEST_ASSERT_EQUAL(node20.balanceFactor,0);
+    TEST_ASSERT_EQUAL(node50.balanceFactor,0);
+    TEST_ASSERT_EQUAL(node30.balanceFactor,0);
 }
 
 void test_rotate_rightleft_BF_21neg1(void)
@@ -318,10 +318,10 @@ void test_rotate_rightleft_BF_21neg1(void)
     initNode(&node60,&node50,NULL,-1);
 
     avlbalance(&root);
-    TEST_ASSERT_EQUAL(node10.bf,0);
-    TEST_ASSERT_EQUAL(node40.bf,0);
-    TEST_ASSERT_EQUAL(node60.bf,-1);
-    TEST_ASSERT_EQUAL(node20.bf,0);
-    TEST_ASSERT_EQUAL(node50.bf,0);
-    TEST_ASSERT_EQUAL(node30.bf,0);
+    TEST_ASSERT_EQUAL(node10.balanceFactor,0);
+    TEST_ASSERT_EQUAL(node40.balanceFactor,0);
+    TEST_ASSERT_EQUAL(node60.balanceFactor,-1);
+    TEST_ASSERT_EQUAL(node20.balanceFactor,0);
+    TEST_ASSERT_EQUAL(node50.balanceFactor,0);
+    TEST_ASSERT_EQUAL(node30.balanceFactor,0);
 }

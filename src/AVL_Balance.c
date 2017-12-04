@@ -8,33 +8,33 @@ int avlBalanceLeftTree(Node **rootPtr){
   Node *child = node->right;
   Node *grandChild = node->right->left;
 
-  if(child->bf > 0 ){
-    node->bf = 0;
-    child->bf = 0;
+  if(child->balanceFactor > 0 ){
+    node->balanceFactor = 0;
+    child->balanceFactor = 0;
     *rootPtr = rotateLeft(*rootPtr);
     }
-  else if(child->bf == 0){
-    node->bf = 1;
-    child->bf = -1;
+  else if(child->balanceFactor == 0){
+    node->balanceFactor = 1;
+    child->balanceFactor = -1;
     *rootPtr = rotateLeft(*rootPtr);
     }
-  else if(child->bf == -1){
-    if(grandChild->bf == -1){
-      node->bf = 0;
-      child->bf = 1;
-      grandChild->bf = 0;
+  else if(child->balanceFactor == -1){
+    if(grandChild->balanceFactor == -1){
+      node->balanceFactor = 0;
+      child->balanceFactor = 1;
+      grandChild->balanceFactor = 0;
       *rootPtr = rotateRightLeft(*rootPtr);
       }
-    else if(grandChild->bf == 0){
-      node->bf = 0;
-      child->bf = 0;
-      grandChild->bf = 0;
+    else if(grandChild->balanceFactor == 0){
+      node->balanceFactor = 0;
+      child->balanceFactor = 0;
+      grandChild->balanceFactor = 0;
       *rootPtr = rotateRightLeft(*rootPtr);
       }
-    else if(grandChild->bf == 1){
-      node->bf = -1;
-      child->bf = 0;
-      grandChild->bf = 0;
+    else if(grandChild->balanceFactor == 1){
+      node->balanceFactor = -1;
+      child->balanceFactor = 0;
+      grandChild->balanceFactor = 0;
       *rootPtr = rotateRightLeft(*rootPtr);
       }
   }
@@ -46,33 +46,33 @@ int avlBalanceRightTree(Node **rootPtr){
   Node *child = node->left;
   Node *grandChild = node->left->right;
 
-  if(child->bf < 0 ){
-    node->bf = 0;
-    child->bf = 0;
+  if(child->balanceFactor < 0 ){
+    node->balanceFactor = 0;
+    child->balanceFactor = 0;
     *rootPtr = rotateRight(*rootPtr);
     }
-  else if(child->bf == 0){
-    node->bf = -1;
-    child->bf = 1;
+  else if(child->balanceFactor == 0){
+    node->balanceFactor = -1;
+    child->balanceFactor = 1;
     *rootPtr = rotateRight(*rootPtr);
     }
-  else if(child->bf == 1){
-    if(grandChild->bf == 1){
-      node->bf = 0;
-      child->bf = -1;
-      grandChild->bf = 0;
+  else if(child->balanceFactor == 1){
+    if(grandChild->balanceFactor == 1){
+      node->balanceFactor = 0;
+      child->balanceFactor = -1;
+      grandChild->balanceFactor = 0;
       *rootPtr = rotateLeftRight(*rootPtr);
       }
-    else if(grandChild->bf == 0){
-      node->bf = 0;
-      child->bf = 0;
-      grandChild->bf = 0;
+    else if(grandChild->balanceFactor == 0){
+      node->balanceFactor = 0;
+      child->balanceFactor = 0;
+      grandChild->balanceFactor = 0;
       *rootPtr = rotateLeftRight(*rootPtr);
       }
-    else if(grandChild->bf == -1){
-      node->bf = 1;
-      child->bf = 0;
-      grandChild->bf = 0;
+    else if(grandChild->balanceFactor == -1){
+      node->balanceFactor = 1;
+      child->balanceFactor = 0;
+      grandChild->balanceFactor = 0;
       *rootPtr = rotateLeftRight(*rootPtr);
       }
   }
@@ -83,71 +83,71 @@ int avlBalanceRightTree(Node **rootPtr){
 
 void avlbalance(Node **rootPtr){
   Node *node = *rootPtr;
-  if(node->bf==2){
+  if(node->balanceFactor==2){
     Node *child = node->right;
     Node *grandChild = node->right->left;
-    if(child->bf > 0 ){
-    node->bf = 0;
-    child->bf = 0;
+    if(child->balanceFactor > 0 ){
+    node->balanceFactor = 0;
+    child->balanceFactor = 0;
     *rootPtr = rotateLeft(*rootPtr);
     }
-    else if(child->bf == 0){
-    node->bf = 1;
-    child->bf = -1;
+    else if(child->balanceFactor == 0){
+    node->balanceFactor = 1;
+    child->balanceFactor = -1;
     *rootPtr = rotateLeft(*rootPtr);
     }
-    else if(child->bf == -1){
-    if(grandChild->bf == -1){
-      node->bf = 0;
-      child->bf = 1;
-      grandChild->bf = 0;
+    else if(child->balanceFactor == -1){
+    if(grandChild->balanceFactor == -1){
+      node->balanceFactor = 0;
+      child->balanceFactor = 1;
+      grandChild->balanceFactor = 0;
       *rootPtr = rotateRightLeft(*rootPtr);
       }
-      else if(grandChild->bf == 0){
-      node->bf = 0;
-      child->bf = 0;
-      grandChild->bf = 0;
+      else if(grandChild->balanceFactor == 0){
+      node->balanceFactor = 0;
+      child->balanceFactor = 0;
+      grandChild->balanceFactor = 0;
       *rootPtr = rotateRightLeft(*rootPtr);
       }
-      else if(grandChild->bf == 1){
-      node->bf = -1;
-      child->bf = 0;
-      grandChild->bf = 0;
+      else if(grandChild->balanceFactor == 1){
+      node->balanceFactor = -1;
+      child->balanceFactor = 0;
+      grandChild->balanceFactor = 0;
       *rootPtr = rotateRightLeft(*rootPtr);
       }
     }
   }
-  if(node->bf==-2){
+  if(node->balanceFactor==-2){
     Node *child = node->left;
     Node *grandChild = node->left->right;
 
-    if(child->bf < 0 ){
-      node->bf = 0;
-      child->bf = 0;
+    if(child->balanceFactor < 0 ){
+      node->balanceFactor = 0;
+      child->balanceFactor = 0;
       *rootPtr = rotateRight(*rootPtr);
       }
-    else if(child->bf == 0){
-      node->bf = -1;
-      child->bf = 1;
+    else if(child->balanceFactor == 0){
+      node->balanceFactor = -1;
+      child->balanceFactor = 1;
       *rootPtr = rotateRight(*rootPtr);
       }
-    else if(child->bf == 1){
-      if(grandChild->bf == 1){
-        node->bf = 0;
-        child->bf = -1;
-        grandChild->bf = 0;
+    else if(child->balanceFactor == 1){
+      if(grandChild->balanceFactor == 1){
+        node->balanceFactor = 0;
+        child->balanceFactor = -1;
+        grandChild->balanceFactor = 0;
         *rootPtr = rotateLeftRight(*rootPtr);
         }
-      else if(grandChild->bf == 0){
-        node->bf = 0;
-        child->bf = 0;
-        grandChild->bf = 0;
+      else if(grandChild->balanceFactor == 0){
+        node->balanceFactor = 0;
+        child->balanceFactor = 0;
+        grandChild->balanceFactor = 0;
         *rootPtr = rotateLeftRight(*rootPtr);
         }
-      else if(grandChild->bf == -1){
-        node->bf = 1;
-        child->bf = 0;
-        grandChild->bf = 0;
+      else if(grandChild->balanceFactor == -1){
+        node->balanceFactor = 1;
+        child->balanceFactor = 0;
+        grandChild->balanceFactor = 0;
         *rootPtr = rotateLeftRight(*rootPtr);
         }
     }

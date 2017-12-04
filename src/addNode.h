@@ -5,6 +5,11 @@
 #include <stdio.h>
 #include <Rotate.h>
 #include "AVL_Balance.h"
-Node* addNode_SIM(Node *addition,Node *node);
-Node *addNode(Node **rootPtr, Node *nodeToAdd);
+
+
+
+
+
+Node *addNode(Node **rootPtr, Node *nodeToAdd,Compare cmp);
+
 #endif // _ADDNODE_H

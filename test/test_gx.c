@@ -6,6 +6,7 @@
 #include "nodeHelper.h"
 #include "Rotate.h"
 #include "AVL_Balance.h"
+#include "AVLInteger.h"
 
 
 void setUp(void)
@@ -24,7 +25,7 @@ void test_deleteLeaf_given_NULL(void){
     Node *root;
     root = NULL;
 
-    Node *deletedNode = nodeRemove(&root, 0);
+    Node *deletedNode = avlRemoveInteger(&root, 0);
     TEST_ASSERT_NULL(deletedNode);
     TEST_ASSERT_NULL(root);
 }
@@ -38,7 +39,7 @@ void test_deleteLeaf_given_node10_expect_NULL(void)
     Node *root;
     root = &node10;
 
-    nodeRemove(&root, 10);
+    avlRemoveInteger(&root, 10);
     TEST_ASSERT_NULL(root);
 }
 
@@ -53,7 +54,7 @@ void test_deleteLeaf_given_10_5_delete_5_expect_10(void){
     Node *root;
     root = &node10;
 
-    nodeRemove(&root, 5);
+    avlRemoveInteger(&root, 5);
     TEST_ASSERT_EQUAL_NODE2(&node10, NULL, NULL, 0);
 }
 
@@ -68,7 +69,7 @@ void test_deleteLeaf_given_10_15_delete_15_expect_10(void)
     Node *root;
     root = &node10;
 
-    nodeRemove(&root, 15);
+    avlRemoveInteger(&root, 15);
     TEST_ASSERT_EQUAL_NODE2(&node10, NULL, NULL, 0);
 }
 
@@ -88,7 +89,7 @@ void test_deleteLeaf_given_10_15_delete_15_expect_10_with_1Parent(void)
     Node *root;
     root = &node5;
 
-    nodeRemove(&root, 15);
+    avlRemoveInteger(&root, 15);
     TEST_ASSERT_EQUAL_NODE2(&node10, NULL, NULL, 0);
     TEST_ASSERT_EQUAL_NODE2(&node5, &node1, &node10, 0);
 }
@@ -109,7 +110,7 @@ void test_deleteLeaf_given_5_1_10_15_delete_15_expect_rotateLeft(void)
     Node *root;
     root = &node5;
 
-    nodeRemove(&root, 1);
+    avlRemoveInteger(&root, 1);
     TEST_ASSERT_EQUAL_NODE2(&node10, &node5, &node15, 0);
     TEST_ASSERT_EQUAL_NODE2(&node5, NULL, NULL, 0);
     TEST_ASSERT_EQUAL_NODE2(&node15, NULL, NULL, 0);
@@ -132,7 +133,7 @@ void test_deleteLeaf_given_5_3_1_10_delete_10_expect_rotateRight(void)
     Node *root;
     root = &node5;
 
-    nodeRemove(&root, 10);
+    avlRemoveInteger(&root, 10);
     TEST_ASSERT_EQUAL_NODE2(&node3, &node1, &node5, 0);
     TEST_ASSERT_EQUAL_NODE2(&node5, NULL, NULL, 0);
     TEST_ASSERT_EQUAL_NODE2(&node1, NULL, NULL, 0);
@@ -155,7 +156,7 @@ void test_deleteLeaf_given_5_3_1_10_delete_10_expect_rotateLeftRight(void)
     Node *root;
     root = &node5;
 
-    nodeRemove(&root, 10);
+    avlRemoveInteger(&root, 10);
     TEST_ASSERT_EQUAL_NODE2(&node3, &node1, &node5, 0);
     TEST_ASSERT_EQUAL_NODE2(&node5, NULL, NULL, 0);
     TEST_ASSERT_EQUAL_NODE2(&node1, NULL, NULL, 0);
@@ -178,7 +179,7 @@ void test_deleteLeaf_given_5_3_1_10_delete_10_expect_rotateRightLeft(void)
     Node *root;
     root = &node5;
 
-    nodeRemove(&root, 1);
+    avlRemoveInteger(&root, 1);
     TEST_ASSERT_EQUAL_NODE2(&node10, &node5, &node15, 0);
     TEST_ASSERT_EQUAL_NODE2(&node5, NULL, NULL, 0);
     TEST_ASSERT_EQUAL_NODE2(&node15, NULL, NULL, 0);
@@ -197,7 +198,7 @@ void test_deleteLeaf_bf_parent_no_change(void){
     Node *root;
     root = &node5;
 
-    nodeRemove(&root, 1);
+    avlRemoveInteger(&root, 1);
     TEST_ASSERT_EQUAL_NODE2(&node5, NULL, &node10, 1);
     // TEST_ASSERT_EQUAL(NO_CHANGED, heightChanged);
 }
@@ -219,7 +220,7 @@ void test_deleteNonLeaf_given_5_3_1_10_delete_15_expect_1_5_10(void)
     Node *root;
     root = &node5;
 
-    Node *deletedNode = nodeRemove(&root, 15);
+    Node *deletedNode = avlRemoveInteger(&root, 15);
     TEST_ASSERT_NOT_NULL(deletedNode);
     TEST_ASSERT_EQUAL_NODE2(&node5, &node1, &node10, 0);
     TEST_ASSERT_EQUAL_NODE2(&node1, NULL, NULL, 0);
@@ -245,14 +246,14 @@ void test_deleteLeaf_given_deletedNode_left_right_Not_null_delete_15(void)
     Node *root;
     root = &node5;
 
-    Node *deletedNode = nodeRemove(&root, 15);
+    Node *deletedNode = avlRemoveInteger(&root, 15);
     TEST_ASSERT_NOT_NULL(deletedNode);
     TEST_ASSERT_EQUAL_PTR(node20.left,&node10);
     TEST_ASSERT_EQUAL_PTR(node20.right,NULL);
-    TEST_ASSERT_EQUAL(node20.bf,-1);
+    TEST_ASSERT_EQUAL(node20.balanceFactor,-1);
     TEST_ASSERT_EQUAL_PTR(node5.left,&node1);
     TEST_ASSERT_EQUAL_PTR(node5.right,&node20);
-    TEST_ASSERT_EQUAL(node5.bf,1);
+    TEST_ASSERT_EQUAL(node5.balanceFactor,1);
     TEST_ASSERT_EQUAL_NODE2(&node5, &node1, &node20, 1);
     TEST_ASSERT_EQUAL_NODE2(&node10, NULL, NULL, 0);
     TEST_ASSERT_EQUAL_NODE2(&node1, NULL, NULL, 0);
@@ -283,7 +284,7 @@ void test_deleteLeaf_given_deletedNode_left_right_Not_null_grandchild_notNULL_de
     Node *root;
     root = &node5;
 
-    nodeRemove(&root, 15);
+    avlRemoveInteger(&root, 15);
     TEST_ASSERT_EQUAL_NODE2(&node5, &node4, &node10, 0);
     TEST_ASSERT_EQUAL_NODE2(&node10, &node7, &node20, 0);
     TEST_ASSERT_EQUAL_NODE2(&node3, NULL, NULL, 0);
@@ -317,7 +318,7 @@ void xtest_nodeRemove_3_expect_rotateAtParent(void)
     initNode(&node15, NULL, NULL, 0);
 
     Node *root = &node3;
-    nodeRemove(&root, 3);
+    avlRemoveInteger(&root, 3);
 
     TEST_ASSERT_EQUAL_NODE2(&node5, &node2, &node10, 0);
     TEST_ASSERT_EQUAL_NODE2(&node2, &node1, &node4, 0);
@@ -348,7 +349,7 @@ void test_nodeRemove_replace_and_pass_grandChild_to_child(void){
     initNode(&node10, NULL, NULL, 0);
 
     Node *root = &node20;
-    nodeRemove(&root, 20);
+    avlRemoveInteger(&root, 20);
     TEST_ASSERT_EQUAL_PTR(root,&node15);
     TEST_ASSERT_EQUAL_NODE2(&node15, &node5, &node35, 0);
     TEST_ASSERT_EQUAL_NODE2(&node5, &node1, &node10, 0);
@@ -377,13 +378,13 @@ void test_nodeRemove_replace_and_rotate_rightLeft(void){
     initNode(&node70, NULL, NULL, 0);
 
     Node *root = &node40;
-    root=nodeRemove(&root, 40);
+    root=avlRemoveInteger(&root, 40);
     TEST_ASSERT_EQUAL_PTR(root,&node45);
     TEST_ASSERT_EQUAL_NODE2(&node50, NULL, NULL, 0);
     TEST_ASSERT_EQUAL_NODE2(&node35, NULL, NULL, 0);
     TEST_ASSERT_EQUAL_PTR(&node50,node60.left);
     TEST_ASSERT_EQUAL_PTR(&node70,node60.right);
-    TEST_ASSERT_EQUAL(0,node60.bf);
+    TEST_ASSERT_EQUAL(0,node60.balanceFactor);
     TEST_ASSERT_EQUAL_NODE2(&node60, &node50, &node70, 0);
     TEST_ASSERT_EQUAL_NODE2(&node30, NULL, &node35, 1);
     TEST_ASSERT_EQUAL_NODE2(&node45, &node30, &node60, 0);
@@ -411,7 +412,7 @@ void test_nodeRemove_replace_and_child_rotate_R(void)
     initNode(&node70, NULL, NULL, 0);
 
     Node *root = &node50;
-    nodeRemove(&root, 50);
+    avlRemoveInteger(&root, 50);
     TEST_ASSERT_EQUAL_PTR(root,&node30);
     TEST_ASSERT_EQUAL_NODE2(&node40, NULL, NULL, 0);
     TEST_ASSERT_EQUAL_NODE2(&node20, &node10, NULL, -1);
@@ -443,7 +444,7 @@ void test_nodeRemove_replace_and_child_rotate_RL(void)
     initNode(&node70, NULL, NULL, 0);
 
     Node *root = &node50;
-    nodeRemove(&root, 50);
+    avlRemoveInteger(&root, 50);
     TEST_ASSERT_EQUAL_PTR(root,&node30);
     TEST_ASSERT_EQUAL_NODE2(&node40, NULL, NULL, 0);
     TEST_ASSERT_EQUAL_NODE2(&node20, NULL, &node25, 1);
@@ -476,7 +477,7 @@ void test_nodeRemove_replace_and_child_rotate_R_rootPtr_bf_nochanged(void)
     initNode(&node70, NULL, NULL, 0);
 
     Node *root = &node50;
-    nodeRemove(&root, 50);
+    avlRemoveInteger(&root, 50);
     TEST_ASSERT_EQUAL_PTR(root,&node30);
     TEST_ASSERT_EQUAL_NODE2(&node40, NULL, NULL, 0);
     TEST_ASSERT_EQUAL_NODE2(&node20, &node15, &node25,0);
@@ -507,7 +508,7 @@ void test_nodeRemove_replace_and_child_rotate_L(void)
     initNode(&node15, &node10, &node25, 1);
 
     Node *root = &node15;
-    nodeRemove(&root, 15);
+    avlRemoveInteger(&root, 15);
     TEST_ASSERT_EQUAL_PTR(root,&node20);
     TEST_ASSERT_EQUAL_NODE2(&node5, NULL, NULL, 0);
     TEST_ASSERT_EQUAL_NODE2(&node25, NULL, NULL, 0);
@@ -515,7 +516,7 @@ void test_nodeRemove_replace_and_child_rotate_L(void)
     TEST_ASSERT_EQUAL_NODE2(&node30, &node25, &node35, 0);
     TEST_ASSERT_EQUAL_PTR(&node10,node20.left);
     TEST_ASSERT_EQUAL_PTR(&node30,node20.right);
-    TEST_ASSERT_EQUAL(0,node20.bf);
+    TEST_ASSERT_EQUAL(0,node20.balanceFactor);
     TEST_ASSERT_EQUAL_NODE2(&node20, &node10, &node30, 0);
     TEST_ASSERT_EQUAL_NODE2(&node10, &node5, NULL, -1);
 

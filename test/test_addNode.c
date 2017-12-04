@@ -6,6 +6,7 @@
 #include "nodeHelper.h"
 #include "Rotate.h"
 #include "AVL_Balance.h"
+#include "AVLInteger.h"
 /**
 ---------rotateLeft----------------------
 *        30 +2                     40
@@ -31,33 +32,14 @@ void tearDown(void){
   initNode(&node40,&node30,NULL,-1);
 
   Node *root = &node40;
-  addNode(&root,&node20);
+  root=avlAddInteger(&root,&node20);
   TEST_ASSERT_EQUAL_PTR(&node30,root);
-  TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node40);
-  TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node20);
   TEST_ASSERT_EQUAL_NODE(&node20,&node40,0,&node30);
+  TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node40);
 
 }
 
 
-
-/**
----------test_givenewNode-----------------
-*
-*
-*      10     -> + 2     10
-*     / \               / \
-*    5  20             5  20
-*                     /
-*                    2
-void test_inset_newNode(void)
-{   Node *root;
-    root = GiveNewNode(100);
-    TEST_ASSERT_EQUAL(0,root->bf);
-    TEST_ASSERT_EQUAL_PTR(NULL,root->left);
-    TEST_ASSERT_EQUAL_PTR(NULL,root->right);
-}
-**/
 /**
 ----------------test_addNode_right----------
 *        10            10
@@ -69,7 +51,7 @@ void test_addNode_right(void){
    Node *root = &node10;
     initNode(&node10,NULL,&node30,1);
 
-    addNode(&root,&node5);
+    root=avlAddInteger(&root,&node5);
     TEST_ASSERT_EQUAL_PTR(&node10,root);
     TEST_ASSERT_EQUAL_PTR(&node5,node10.left);
     TEST_ASSERT_EQUAL_PTR(&node30,node10.right);
@@ -86,8 +68,9 @@ void test_addNode_right(void){
 void test_addNode_left(void)
 {   Node *root = &node10;
     initNode(&node10,&node5,NULL,-1);
+    initNode(&node30,NULL,NULL,0);
 
-    addNode(&root,&node30);
+    root=avlAddInteger(&root,&node30);
     TEST_ASSERT_EQUAL_PTR(&node10,root);
     TEST_ASSERT_EQUAL_PTR(&node5,node10.left);
     TEST_ASSERT_EQUAL_PTR(&node30,node10.right);
@@ -106,7 +89,7 @@ void test_addNode_1_t0_5_leftchild(void)
     initNode(&node10,&node5,&node30,0);
     initNode(&node5,NULL,NULL,0);
 
-    addNode(&root,&node1);
+    root=avlAddInteger(&root,&node1);
     TEST_ASSERT_EQUAL_PTR(&node10,root);
     TEST_ASSERT_EQUAL_PTR(&node1,node5.left);
     TEST_ASSERT_EQUAL_PTR(&node30,node10.right);
@@ -120,7 +103,7 @@ void test_addNode_40_t0_30_rightchild(void)
     initNode(&node5,NULL,NULL,0);
     initNode(&node30,NULL,NULL,0);
 
-    addNode(&root,&node40);
+    root=avlAddInteger(&root,&node40);
     TEST_ASSERT_EQUAL_PTR(&node10,root);
     TEST_ASSERT_EQUAL_PTR(NULL,node5.left);
     TEST_ASSERT_EQUAL_PTR(NULL,node5.right);
@@ -136,10 +119,10 @@ void test_addNode_duplicate(void)
     initNode(&node5,&node1,NULL,-1);
     initNode(&node30,NULL,NULL,0);
 
-    addNode(&root,&node1);
+    root=avlAddInteger(&root,&node1);
     TEST_ASSERT_EQUAL_PTR(&node10,root);
     TEST_ASSERT_EQUAL_NODE(&node5,&node30,-1,&node10);
     TEST_ASSERT_EQUAL_NODE(&node1,NULL,-1,&node5);
-    
+
 
 }
