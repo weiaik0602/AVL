@@ -65,7 +65,7 @@ void test_nodeRemove_given_40_with_child_30_delete_30_expect_40_only(void){
 ---------------------------------remove 50------------------------------
 *       40(0)                              40 (-1)
 *       / \          remove 50            /
-*   30 (0) 50(0)   --------------->     30
+*   30 (0) 50(0)   --------------->     30(0)
 *
 **/
 void test_nodeRemove_given_40_with_child_30_50__delete_50_expect_40_30(void){
@@ -84,9 +84,9 @@ void test_nodeRemove_given_40_with_child_30_50__delete_50_expect_40_30(void){
 ---------------------------------remove 50------------------------------
 *       40(-1)                            40 (-2)                                  30 (0)
 *       / \          remove 50          /                 rotate right           /  \
-*   30 (-1) 50(0)   --------------->   30(-1)            ------------>         20    40 (0)
+*   30 (-1) 50(0)   --------------->   30(-1)            ------------>         20(0) 40 (0)
 *   /                                 /
-*  20                               20
+*  20(0)                             20(0)
 *
 **/
 void test_nodeRemove_after_remove_rotate_right(void){
@@ -132,8 +132,8 @@ void test_nodeRemove_after_remove_rotate_right_condition2(void){
 *       50 (1) 95(1)   --------------->   50(1)   95[0]         ---------------->   (-1) 50  90 (0)
 *      / \     \                            / \                                          /    / \
 *  45   60 (1)   100(0)                    45  60 (1)                                   45   70   95
-*        \                                       \
-*        70                                       70
+*  (0)   \                                 (0)   \
+*        70(0)                                   70(0)
 *
 **/
 void test_remove_given_a_avltree_need_rotateLeftRight_after_remove_condition1_expect_balance(void){
@@ -160,7 +160,7 @@ void test_remove_given_a_avltree_need_rotateLeftRight_after_remove_condition1_ex
 ---------------------------------remove 100       &           rotateLeftRight--------------------------------
 *           90(-1)                            90 (-2)                                        60 (0)
 *          / \          remove 100            /  \               rotateleftright           /  \
-*       50 (1) 95(1)   --------------->   50(1)   95[0]         ---------------->   (0)   50   90 (1)
+*       50 (1) 95(1)   --------------->   50(1)   95[0]         ---------------->      (0)50   90 (1)
 *      / \     \                            / \                                          / \     \
 *  45   60 (-1) 100(0)                    45  60 (-1)                                   45  55    95
 *        /                                     /
@@ -192,7 +192,7 @@ void test_remove_given_a_avltree_need_rotateLeftRight_after_remove_condition2_ex
 ---------------------------------remove 100       &           rotateLeftRight--------------------------------
 *           90(-1)                            90 (-2)                                        60 (0)
 *          / \          remove 100            /  \               rotateleftright           /  \
-*       50 (1) 95(1)   --------------->   50(1)   95[0]         ---------------->   (0)   50   90 (0)
+*       50 (1) 95(1)   --------------->   50(1)   95[0]         ---------------->      (0)50   90 (0)
 *      / \     \                            / \                                          / \   / \
 *  45   60 (0) 100(0)                    45  60 (-1)                                   45  55 70 95
 *        / \                                 /  \
@@ -223,11 +223,11 @@ void test_remove_given_a_avltree_need_rotateLeftRight_after_remove_condition3_ex
 }
 /**
 ---------------------------------remove 30 and rotateLeft---------------------------------
-*        40 (1)                            40 (+2)                             50
+*        40 (1)                            40 (+2)                             50(0)
 *       /   \           remove 30            \                 rotate left    /   \
 *     30     50 (+1)   ---------->            50(1)        -------------->  40    100
-*            \                                 \
-*            100                               100
+*            \                                 \                              (0) (0)
+*            100                               100(0)
 *
 **/
 void test_remove_rotateleft1(void){
@@ -248,9 +248,9 @@ void test_remove_rotateleft1(void){
 
 /**
 ---------------------------------remove 30 and rotateLeft---------------------------------
-*        40 (1)                            40 (+2)                             50
+*        40 (1)                            40 (+2)                             50(-1)
 *       /   \           remove 30            \                 rotate left    /   \
-*     30     50 (0)   ---------->            50(0)        -------------->  40    100
+*   (0)30    50(0)   ---------->             50(0)        -------------->  40(1)    100(0)
 *            /\                              /   \                          \
 *          45  100                         45   100                         45
 *
@@ -274,11 +274,11 @@ void test_remove_rotateleft2(void){
 }
 /**
 ---------------------------------remove 15 and rotateLeft---------------------------------
-*        30 (1)                            30 (2)                                   40
+*        30 (1)                            30 (2)                                  40(0)
 *       /   \           remove 15         /  \                 rotateRightleft    /   \
-*     20     50 (-1)   ------------>    20    50(-1)        ----------------   30     50
+* (-1)20     50 (-1)   ------------>    20    50(-1)        ----------------    30(0)  50(1)
 *    /       /\                              /   \                             / \      \
-*  15      40  100                         40   100                          20 35      100
+*  15   (-1)40 100                      (-1)40   100(0)                      20 35      100
 *         /                                /
 *       35                               35
 *
@@ -306,11 +306,11 @@ void test_remove_given_Avl_tree_remove_15_then_rotaterightleft_condition1_(void)
 }
 /**
 ---------------------------------remove 15 and rotateLeft---------------------------------
-*        30 (1)                            30 (2)                                   40
+*        30 (1)                            30 (2)                                   40(0)
 *       /   \           remove 15         /  \                 rotateRightleft    /   \
-*     20     50 (-1)   ------------>    20    50(-1)        ----------------   30     50
+*  (-1)20    50(-1)   ------------>  (0)20    50(-1)        ----------------   30     50
 *    /       /\                              /   \                             / \    / \
-*  15      40  100                         40   100                          20 35  45    100
+*  15    (0)40  100                       (0)40   100                          20 35  45 100
 *         / \                             / \
 *       35  45                           35 45
 *
@@ -341,11 +341,11 @@ void test_remove_given_Avl_tree_remove_15_then_rotaterightleft_condition2_(void)
 ---------------------------------remove 15 and rotateLeft---------------------------------
 *        30 (1)                            30 (2)                                   40
 *       /   \           remove 15         /  \                 rotateRightleft    /   \
-*     20     50 (-1)   ------------>    20    50(-1)        ----------------   30     50
+*  (-1)20    50(-1)   ------------>    20    50(-1)        ----------------   30     50
 *    /       /\                              /   \                             /     /  \
-*  15      40  100                         40   100                          20   45   100
-*           \                              \
-*           45                              45
+*  15    (1)40  100                       (1)40   100                          20   45   100
+*           \                                 \
+*           45                                45
 *
 *
 **/
@@ -372,10 +372,10 @@ void test_remove_given_Avl_tree_remove_15_then_rotaterightleft_condition3_(void)
 /**
 -----------------------------------------------------------------------------------------
 *        30 (1)                            40 (0)
-*       /   \           remove 30         /  \
-*     20     50 (-1)   ------------>    20    50(0)
+*       /   \           remove 30         /    \
+*  (-1)20     50 (-1)   ------------> (-1)20    50(0)
 *    /       /\                         /     /   \
-*  15      40  100                     15    45   100
+*  15   (1)40  100                     15    45   100
 *           \
 *           45
 *
@@ -432,7 +432,7 @@ void test_remove_given_Avl_tree_remove_30_50_movedUP(void){
 ---------------------------------remove 15 and rotateLeft---------------------------------
 *        30 (1)                            40 (1)
 *       /   \           remove 30         /  \
-*     20     50 (0)   ------------>    20    50
+*     20     50 (0)   ------------>    20    50(1)
 *            / \                              \
 *           40 100                            100
 *
@@ -554,4 +554,76 @@ void test_remove_given_Avl_tree_remove_20_test2(void){
   TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node20);
 }
 
-///////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+/**
+*          20(1)                           25(0)
+*          /   \           remove 20       /   \
+*       10(-1) 30(1)        ----->     10(-1)  40(0)
+*       /      /  \                     /       /  \
+*     5(0)   25(0) 40(1)             5(0)    30(0) 50(0)
+*                    \
+*                    50(0)
+**/
+
+void test_remove_node_20_replace_by_node_25_v2(void){
+  Node *root = &node20;
+  initNode(&node10,&node5,NULL,-1);
+  initNode(&node30,&node25,&node40,1);
+  initNode(&node20,&node10,&node30,1);
+  initNode(&node40,NULL,&node50,1);
+  initNode(&node25,NULL,NULL,0);
+  initNode(&node5,NULL,NULL,0);
+  initNode(&node50,NULL,NULL,0);
+
+  root=nodeRemove(&root,20);
+  TEST_ASSERT_EQUAL_PTR(&node25,root);
+  TEST_ASSERT_EQUAL_PTR(&node10,node25.left);
+  TEST_ASSERT_EQUAL_PTR(&node40,node25.right);
+  TEST_ASSERT_EQUAL_PTR(&node30,node40.left);
+  TEST_ASSERT_EQUAL_PTR(&node50,node40.right);
+  TEST_ASSERT_EQUAL_PTR(NULL,node30.right);
+  TEST_ASSERT_EQUAL_PTR(NULL,node30.left);
+  TEST_ASSERT_EQUAL_PTR(NULL,node10.right);
+  TEST_ASSERT_EQUAL_PTR(&node5,node10.left);
+  TEST_ASSERT_EQUAL_PTR(NULL,node50.right);
+  TEST_ASSERT_EQUAL_PTR(NULL,node50.left);
+  TEST_ASSERT_EQUAL_PTR(NULL,node5.right);
+  TEST_ASSERT_EQUAL_PTR(NULL,node5.left);
+  TEST_ASSERT_EQUAL(0,node40.bf);
+  TEST_ASSERT_EQUAL(0,node30.bf);
+  TEST_ASSERT_EQUAL(0,node25.bf);
+  TEST_ASSERT_EQUAL(-1,node10.bf);
+  TEST_ASSERT_EQUAL(0,node50.bf);
+  TEST_ASSERT_EQUAL(0,node5.bf);
+}
+/**
+*          20(1)                           20(0)
+*          /   \           remove 30       /   \
+*        10(0) 30(0)        ----->     10(0)    40(-1)
+*             /   \                            /
+*         15(0)  40(0)                      15(0)
+*
+**/
+void test_remove_node_30_replace_by_node_40_v2(void){
+  Node *root = &node20;
+  initNode(&node10,NULL,NULL,0);
+  initNode(&node30,&node25,&node40,0);
+  initNode(&node20,&node10,&node30,1);
+  initNode(&node40,NULL,NULL,0);
+  initNode(&node15,NULL,NULL,0);
+
+  root=nodeRemove(&root,30);
+  TEST_ASSERT_EQUAL_PTR(&node20,root);
+  TEST_ASSERT_EQUAL_PTR(&node10,node20.left);
+  TEST_ASSERT_EQUAL_PTR(&node40,node20.right);
+  TEST_ASSERT_EQUAL_PTR(NULL,node40.right);
+  TEST_ASSERT_EQUAL_PTR(&node25,node40.left);
+  TEST_ASSERT_EQUAL_PTR(NULL,node10.right);
+  TEST_ASSERT_EQUAL_PTR(NULL,node10.left);
+  TEST_ASSERT_EQUAL_PTR(NULL,node15.right);
+  TEST_ASSERT_EQUAL_PTR(NULL,node15.left);
+  TEST_ASSERT_EQUAL(-1,node40.bf);
+  TEST_ASSERT_EQUAL(1,node20.bf);
+  TEST_ASSERT_EQUAL(0,node10.bf);
+  TEST_ASSERT_EQUAL(0,node15.bf);
+}

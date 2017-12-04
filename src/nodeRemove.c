@@ -1,59 +1,6 @@
 #include "nodeRemove.h"
 
 
-
-
-/*
-Node *findNearest(Node *rootPtr,int choose){
-  Node *child;
-  if(choose==LEFT){
-    child=rootPtr->left;
-    if(child!=NULL){
-      if(child->left!=NULL){
-        rootPtr->bf+=1;
-        child=findNearest(rootPtr->left,choose);
-      }
-      else{
-        if(child->right!=NULL){
-          rootPtr->left=child->right;
-        }
-        else
-          rootPtr->left=NULL;
-        rootPtr->bf+=1;
-        }
-      }
-    else
-      return rootPtr;
-  }
-  else if(choose==RIGHT){
-    child=rootPtr->right;
-    if(child!=NULL){
-      if(child->right!=NULL){
-        rootPtr->bf+=1;
-        child=findNearest(rootPtr->right,choose);
-      }
-      else{
-        if(child->left!=NULL){
-          rootPtr->right=child->left;
-        }
-        else
-          rootPtr->right=NULL;
-        rootPtr->bf-=1;
-        }
-      }
-    else
-      return rootPtr;
-  }
-
-  if(rootPtr!=NULL){
-    if(rootPtr->bf==2  ||  rootPtr->bf==-2 ){
-      avlbalance(&rootPtr);
-    }
-  }
-  return child;
-}
-
-*/
 Node *findNearestO(Node *node,int choose){
   if(choose==LEFT){
     if(node->left!=NULL){
@@ -73,10 +20,14 @@ Node *findNearestO(Node *node,int choose){
 Node *removeRoot(Node *Remove){
   Node *Nearest;
   if(Remove->right!=NULL){
+    //get the lock value from the right child if they are locked
     if(Remove->right->bf==0 && Remove->right->right!=NULL)
       Remove->lock=Remove->right->lock;
+      //find nearest node
     Nearest=findNearestO(Remove->right,LEFT);
+    //remove the nearest node from the tree
     nodeRemove(&(Remove->right),Nearest->data);
+
     if(Remove->right==NULL){
         Nearest->bf=(Remove->bf)-1;
         Nearest->lock=(Remove->lock);
@@ -87,7 +38,6 @@ Node *removeRoot(Node *Remove){
         Nearest->bf=Remove->bf;
       else
         Nearest->bf=(Remove->bf)-1;
-
       Nearest->left=Remove->left;
       Nearest->right=Remove->right;
     }
@@ -124,12 +74,13 @@ Node *removeRoot(Node *Remove){
 Node *nodeRemove(Node **rootPtr, int valToRemove  ){
   Node *node = *rootPtr;
   if(node!=NULL){
+    //lock the left/right node if their bf is 0 and not empty
     if(node->left!=NULL&&node->left->left!=NULL&&node->left->bf==0)
       node->left->lock=1;
     if(node->right!=NULL&&node->right->right!=NULL&&node->right->bf==0)
       node->right->lock=1;
 
-
+      //if value smaller then go left
   if(valToRemove < node->data){
     node->left=nodeRemove(&(node->left),valToRemove);
     if(node->left!=NULL){
@@ -143,6 +94,7 @@ Node *nodeRemove(Node **rootPtr, int valToRemove  ){
     else
       node->lock=0;
   }
+  // else bigger go right
   else if(valToRemove > node->data){
     node->right=nodeRemove(&(node->right),valToRemove);
     if(node->right!=NULL){
@@ -156,13 +108,15 @@ Node *nodeRemove(Node **rootPtr, int valToRemove  ){
     else
       node->lock=0;
   }
+  //else equal then can delete
   else if(valToRemove == node->data){
     node=removeRoot(node);
   }
+  //no bigger,no smaller,not equal= NULL
   else
     return NULL;
   }
-
+  //to balance the tree if there is not balanced
   if(node!=NULL){
     if( node->bf==2  ||  node->bf==-2 ){
       avlbalance(&node);
