@@ -26,7 +26,7 @@ Node *removeRoot(Node *Remove,Compare cmp){
       //find nearest node
     Nearest=findNearest(Remove->right,LEFT);
     //remove the nearest node from the tree
-    nodeRemove(&(Remove->right),Nearest->data,cmp);
+    nodeRemove(&(Remove->right),(uintptr_t)Nearest->data,cmp);
 
     if(Remove->right==NULL){
         Nearest->balanceFactor=(Remove->balanceFactor)-1;
@@ -47,7 +47,7 @@ Node *removeRoot(Node *Remove,Compare cmp){
     if(Remove->left->balanceFactor==0 && Remove->left->right!=NULL)
       Remove->lock=Remove->left->lock;
     Nearest=findNearest(Remove->left,RIGHT);
-    nodeRemove(&(Remove->left),Nearest->data,cmp);
+    nodeRemove(&(Remove->left),(uintptr_t)Nearest->data,cmp);
     if(Remove->left==NULL){
         Nearest->balanceFactor=(Remove->balanceFactor)+1;
         Nearest->lock=(Remove->lock);
