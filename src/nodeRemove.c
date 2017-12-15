@@ -26,7 +26,7 @@ Node *removeRoot(Node *Remove,Compare cmp){
       //find nearest node
     Nearest=findNearest(Remove->right,LEFT);
     //remove the nearest node from the tree
-    nodeRemove(&(Remove->right),(uintptr_t)Nearest->data,cmp);
+    nodeRemove(&(Remove->right),(void *)Nearest->data,cmp);
 
     if(Remove->right==NULL){
         Nearest->balanceFactor=(Remove->balanceFactor)-1;
@@ -47,7 +47,7 @@ Node *removeRoot(Node *Remove,Compare cmp){
     if(Remove->left->balanceFactor==0 && Remove->left->right!=NULL)
       Remove->lock=Remove->left->lock;
     Nearest=findNearest(Remove->left,RIGHT);
-    nodeRemove(&(Remove->left),(uintptr_t)Nearest->data,cmp);
+    nodeRemove(&(Remove->left),(void *)Nearest->data,cmp);
     if(Remove->left==NULL){
         Nearest->balanceFactor=(Remove->balanceFactor)+1;
         Nearest->lock=(Remove->lock);
@@ -71,7 +71,7 @@ Node *removeRoot(Node *Remove,Compare cmp){
 
 
 
-Node *nodeRemove(Node **rootPtr, int valToRemove ,Compare cmp){
+Node *nodeRemove(Node **rootPtr, void* valToRemove ,Compare cmp){
   Node *node = *rootPtr;
   if(node!=NULL){
     //lock the left/right node if their balanceFactor is 0 and not empty

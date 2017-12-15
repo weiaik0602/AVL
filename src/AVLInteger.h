@@ -14,7 +14,7 @@ struct IntegerNode{
 
 
 #define avlAddInteger(root, nodeToAdd)  addNode((Node **)root, (Node *)nodeToAdd,(Compare) integerCompare)
-#define avlRemoveInteger(root,data)     nodeRemove((Node **)root,(int)data ,(Compare) integerCompare)
+#define avlRemoveInteger(root,data)     nodeRemove((Node **)root,(int *)data ,(Compare) integerCompare)
 
 int integerCompare(int data,Node *refNode);
 #endif // _AVLINTEGER_H
