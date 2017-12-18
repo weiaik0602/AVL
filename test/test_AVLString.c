@@ -19,9 +19,10 @@ void tearDown(void)
 
 void test_AVLStringCompare(void)
 {
+  
   int x=stringCompare("Ali",&nodeAbu);
   int y=stringCompare("Ali",&nodeAmin);
-  int z=stringCompare("Ali",&nodeAli);
+  int z=stringCompare("Xaxa",&nodeXaxa);
   TEST_ASSERT_EQUAL(x,1);
   TEST_ASSERT_EQUAL(y,-1);
   TEST_ASSERT_EQUAL(z,0);
