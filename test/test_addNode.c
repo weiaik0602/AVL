@@ -7,6 +7,8 @@
 #include "Rotate.h"
 #include "AVL_Balance.h"
 #include "AVLInteger.h"
+#include "CException.h"
+#include "exception.h"
 /**
 ---------rotateLeft----------------------
 *        30 +2                     40
@@ -114,12 +116,19 @@ void test_addNode_40_t0_30_rightchild(void)
 }
 
 void test_addNode_duplicate(void)
-{   Node *root = &node10;
+{
+    CEXCEPTION_T   ex;
+    Node *root = &node10;
     initNode(&node10,&node5,&node30,-1);
     initNode(&node5,&node1,NULL,-1);
     initNode(&node30,NULL,NULL,0);
-
+    Try{
     root=avlAddInteger(&root,&node1);
+    }
+    Catch(ex)
+    {
+      dumpException(ex);
+    }
     TEST_ASSERT_EQUAL_PTR(&node10,root);
     TEST_ASSERT_EQUAL_NODE(&node5,&node30,-1,&node10);
     TEST_ASSERT_EQUAL_NODE(&node1,NULL,-1,&node5);

@@ -32,7 +32,7 @@
 
        else if(compare==0){
            (*rootPtr)->lock=1;
-           printf("The value %d is in the tree, no changes!!!",nodeToAdd->data);
+           Throw((createException("The node is existing now !!!",0)));
            return *rootPtr;
        }
      }

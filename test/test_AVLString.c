@@ -8,6 +8,8 @@
 #include "Rotate.h"
 #include "AVL_Balance.h"
 #include "nodeRemove.h"
+#include "CException.h"
+#include "exception.h"
 void setUp(void)
 {
   giveInitString();
@@ -19,7 +21,7 @@ void tearDown(void)
 
 void test_AVLStringCompare(void)
 {
-  
+
   int x=stringCompare("Ali",&nodeAbu);
   int y=stringCompare("Ali",&nodeAmin);
   int z=stringCompare("Xaxa",&nodeXaxa);

@@ -4,6 +4,8 @@
 #include <Node.h>
 #include <stdio.h>
 #include <Rotate.h>
+#include "CException.h"
+#include "exception.h"
 #include "AVL_Balance.h"
 
 

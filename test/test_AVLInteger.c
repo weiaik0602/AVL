@@ -7,6 +7,8 @@
 #include "nodeHelper.h"
 #include "Rotate.h"
 #include "AVL_Balance.h"
+#include "CException.h"
+#include "exception.h"
 void setUp(void)
 {
   giveInitdata();

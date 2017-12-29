@@ -7,7 +7,8 @@
 #include "Rotate.h"
 #include "AVL_Balance.h"
 #include "AVLInteger.h"
-
+#include "CException.h"
+#include "exception.h"
 
 void setUp(void)
 {

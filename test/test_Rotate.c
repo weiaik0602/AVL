@@ -3,6 +3,8 @@
 #include "AVL_Balance.h"
 #include <stdio.h>
 #include "nodeHelper.h"
+#include "CException.h"
+#include "exception.h"
 
 void setUp(void)
 {
