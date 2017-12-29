@@ -599,7 +599,7 @@ void test_remove_node_20_replace_by_node_25_v2(void){
   TEST_ASSERT_EQUAL(0,node5.balanceFactor);
 }
 /**
-*          20(1)                           20(0)
+*          20(1)                           20(1)
 *          /   \           remove 30       /   \
 *        10(0) 30(0)        ----->     10(0)    40(-1)
 *             /   \                            /
@@ -609,7 +609,7 @@ void test_remove_node_20_replace_by_node_25_v2(void){
 void test_remove_node_30_replace_by_node_40_v2(void){
   Node *root = &node20;
   initNode(&node10,NULL,NULL,0);
-  initNode(&node30,&node25,&node40,0);
+  initNode(&node30,&node15,&node40,0);
   initNode(&node20,&node10,&node30,1);
   initNode(&node40,NULL,NULL,0);
   initNode(&node15,NULL,NULL,0);
@@ -619,7 +619,7 @@ void test_remove_node_30_replace_by_node_40_v2(void){
   TEST_ASSERT_EQUAL_PTR(&node10,node20.left);
   TEST_ASSERT_EQUAL_PTR(&node40,node20.right);
   TEST_ASSERT_EQUAL_PTR(NULL,node40.right);
-  TEST_ASSERT_EQUAL_PTR(&node25,node40.left);
+  TEST_ASSERT_EQUAL_PTR(&node15,node40.left);
   TEST_ASSERT_EQUAL_PTR(NULL,node10.right);
   TEST_ASSERT_EQUAL_PTR(NULL,node10.left);
   TEST_ASSERT_EQUAL_PTR(NULL,node15.right);
@@ -648,4 +648,33 @@ void test_noderemove_remove_with_right_value_is_NULL5(void)
     TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node10);
     TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node35);
     TEST_ASSERT_EQUAL_NODE(NULL,NULL,0,&node55);
+}
+
+void test_noderemove_remove_nonexisting_val(void){
+  CEXCEPTION_T   ex;
+  Node *root = &node20;
+  initNode(&node10,NULL,NULL,0);
+  initNode(&node30,&node15,&node40,0);
+  initNode(&node20,&node10,&node30,1);
+  initNode(&node40,NULL,NULL,0);
+  initNode(&node15,NULL,NULL,0);
+  Try
+    root=avlRemoveInteger(&root,70);
+  Catch(ex)
+      dumpException(ex);
+  TEST_ASSERT_EQUAL_PTR(&node20,root);
+  TEST_ASSERT_EQUAL_PTR(&node10,node20.left);
+  TEST_ASSERT_EQUAL_PTR(&node30,node20.right);
+  TEST_ASSERT_EQUAL_PTR(&node15,node30.left);
+  TEST_ASSERT_EQUAL_PTR(&node40,node30.right);
+  TEST_ASSERT_EQUAL_PTR(NULL,node40.right);
+  TEST_ASSERT_EQUAL_PTR(NULL,node40.left);
+  TEST_ASSERT_EQUAL_PTR(NULL,node10.right);
+  TEST_ASSERT_EQUAL_PTR(NULL,node10.left);
+  TEST_ASSERT_EQUAL_PTR(NULL,node15.right);
+  TEST_ASSERT_EQUAL_PTR(NULL,node15.left);
+  TEST_ASSERT_EQUAL(0,node40.balanceFactor);
+  TEST_ASSERT_EQUAL(1,node20.balanceFactor);
+  TEST_ASSERT_EQUAL(0,node10.balanceFactor);
+  TEST_ASSERT_EQUAL(0,node15.balanceFactor);
 }

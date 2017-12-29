@@ -83,8 +83,17 @@ Node *nodeRemove(Node **rootPtr, void* valToRemove ,Compare cmp){
       //if value smaller then go left
   int compare =cmp(valToRemove,node);
   if(compare==-1){
+    if(node->left==NULL){
+      Throw((createException("This data is not found in this tree!!!",1)));
+      node->lock=2;
+      return node;
+    }
     node->left=nodeRemove(&(node->left),valToRemove,cmp);
     if(node->left!=NULL){
+      if(node->left->lock==2){
+        node->lock=2;
+        return node;
+      }
       node->lock=node->left->lock;
       node->left->lock=0;
     }
@@ -97,8 +106,18 @@ Node *nodeRemove(Node **rootPtr, void* valToRemove ,Compare cmp){
   }
   // else bigger go right
   else if(compare==1){
+    if(node->right==NULL){
+      Throw((createException("This data is not found in this tree!!!",1)));
+      node->lock=2;
+      return node;
+    }
     node->right=nodeRemove(&(node->right),valToRemove,cmp);
+
     if(node->right!=NULL){
+      if(node->right->lock==2){
+        node->lock=2;
+        return node;
+      }
       node->lock=node->right->lock;
       node->right->lock=0;
     }
