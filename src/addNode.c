@@ -32,7 +32,7 @@
 
        else if(compare==0){
            (*rootPtr)->lock=1;
-           Throw((createException("The node is existing now !!!",0)));
+           Throw((uintptr_t)(createException("The node is existing now !!!",0)));
            return *rootPtr;
        }
      }

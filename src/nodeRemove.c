@@ -84,7 +84,7 @@ Node *nodeRemove(Node **rootPtr, void* valToRemove ,Compare cmp){
   int compare =cmp(valToRemove,node);
   if(compare==-1){
     if(node->left==NULL){
-      Throw((createException("This data is not found in this tree!!!",1)));
+      Throw((uintptr_t)(createException("This data is not found in this tree!!!",1)));
       node->lock=2;
       return node;
     }
@@ -107,7 +107,7 @@ Node *nodeRemove(Node **rootPtr, void* valToRemove ,Compare cmp){
   // else bigger go right
   else if(compare==1){
     if(node->right==NULL){
-      Throw((createException("This data is not found in this tree!!!",1)));
+      Throw((uintptr_t)(createException("This data is not found in this tree!!!",1)));
       node->lock=2;
       return node;
     }

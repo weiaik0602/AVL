@@ -661,7 +661,7 @@ void test_noderemove_remove_nonexisting_val(void){
   Try
     root=avlRemoveInteger(&root,70);
   Catch(ex)
-      dumpException(ex);
+      dumpException((Exception *)&ex);
   TEST_ASSERT_EQUAL_PTR(&node20,root);
   TEST_ASSERT_EQUAL_PTR(&node10,node20.left);
   TEST_ASSERT_EQUAL_PTR(&node30,node20.right);
