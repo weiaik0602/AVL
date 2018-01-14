@@ -127,7 +127,7 @@ void test_addNode_duplicate(void)
     }
     Catch(ex)
     {
-      dumpException((Exception *)&ex);
+      dumpException((Exception *)ex);
     }
     TEST_ASSERT_EQUAL_PTR(&node10,root);
     TEST_ASSERT_EQUAL_NODE(&node5,&node30,-1,&node10);
