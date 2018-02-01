@@ -52,6 +52,7 @@ void tearDown(void){
 void test_addNode_right(void){
    Node *root = &node10;
     initNode(&node10,NULL,&node30,1);
+    initNode(&node30,NULL,NULL,0);
 
     root=avlAddInteger(&root,&node5);
     TEST_ASSERT_EQUAL_PTR(&node10,root);
@@ -132,6 +133,28 @@ void test_addNode_duplicate(void)
     TEST_ASSERT_EQUAL_PTR(&node10,root);
     TEST_ASSERT_EQUAL_NODE(&node5,&node30,-1,&node10);
     TEST_ASSERT_EQUAL_NODE(&node1,NULL,-1,&node5);
+}
+void test_Functional_addNode(void){
+  Node *root = NULL;
+  initNode(&node5,NULL,NULL,0);
+  initNode(&node25,NULL,NULL,0);
+  initNode(&node40,NULL,NULL,0);
+  initNode(&node50,NULL,NULL,0);
+  initNode(&node55,NULL,NULL,0);
+
+  root=avlAddInteger(&root,&node5);
+  root=avlAddInteger(&root,&node25);
+  root=avlAddInteger(&root,&node40);
+  root=avlAddInteger(&root,&node50);
+  root=avlAddInteger(&root,&node55);
 
 
+  TEST_ASSERT_EQUAL_PTR(&node25,root);
+  TEST_ASSERT_EQUAL(node25.balanceFactor,1);
+  TEST_ASSERT_EQUAL_PTR(&node5,node25.left);
+  TEST_ASSERT_EQUAL_PTR(&node50,node25.right);
+  TEST_ASSERT_EQUAL_PTR(&node40,node50.left);
+  TEST_ASSERT_EQUAL_PTR(&node55,node50.right);
+  TEST_ASSERT_EQUAL(node50.balanceFactor,0);
+  TEST_ASSERT_EQUAL(node40.balanceFactor,0);
 }

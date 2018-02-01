@@ -86,7 +86,7 @@ void avlbalance(Node **rootPtr){
   if(node->balanceFactor==2){
     Node *child = node->right;
     Node *grandChild = node->right->left;
-    if(child->balanceFactor > 0 ){
+    if(child->balanceFactor > 0){
     node->balanceFactor = 0;
     child->balanceFactor = 0;
     *rootPtr = rotateLeft(*rootPtr);

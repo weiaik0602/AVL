@@ -39,6 +39,7 @@
 
      if((*rootPtr)->balanceFactor==2||(*rootPtr)->balanceFactor==-2){
        avlbalance(&(*rootPtr));
+       (*rootPtr)->lock=1;
      }
          return *rootPtr;
   }
